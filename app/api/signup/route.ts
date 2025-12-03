@@ -1,0 +1,43 @@
+import { hash } from "bcrypt";
+import { prisma } from "../init";
+import { isEmpty } from "../isEmpty";
+import { sign } from "jsonwebtoken";
+import axios from "axios";
+
+export async function POST(req: Request) {
+  try {
+    const { username, email, password } = await req.json();
+
+    if (
+      !username ||
+      !password ||
+      !email ||
+      isEmpty([username, email, password])
+    )
+      return new Response("Please Fill All Fields", { status: 400 });
+
+    const userCheck = await prisma.user.findFirst({
+      where: { OR: [{ email }, { username }] },
+    });
+    if (userCheck) return new Response("User Already Exists", { status: 400 });
+
+    const hashedPassword = await hash(password, 10);
+
+    const user = await prisma.user.create({
+      data: {
+        username,
+        email,
+        password: hashedPassword,
+      },
+    });
+
+    const token = await sign(
+      { username, id: user.id },
+      process.env.JWT_SECRET as string
+    );
+
+    return Response.json({ token, user });
+  } catch (error: any) {
+    return new Response(error, { status: 500 });
+  }
+}
