@@ -1,7 +1,11 @@
+"use client";
 import Link from "next/link";
 import Cap from "./icons/graduation-cap";
+import { useRouter } from "next/navigation";
+import { deleteCookie } from "cookies-next";
 
 export default function Nav() {
+  const router = useRouter();
   return (
     <nav className="flex items-center gap-2 justify-between px-4  fixed w-screen bg-background ">
       <div className="flex items-center gap-1">
@@ -16,11 +20,19 @@ export default function Nav() {
           <span className="w-0 h-0.5 absolute bottom-0 left-0 bg-foreground group-hover:w-full group-active:w-full transition-all duration-200 rounded-md"></span>
         </div>
         <div className="relative group">
-          <Link href={"/add"}>Add</Link>
+          <Link href={"/profile"}>Profile</Link>
           <span className="w-0 h-0.5 absolute bottom-0 left-0 bg-foreground group-hover:w-full group-active:w-full transition-all duration-200 rounded-md"></span>
         </div>
-        <div className="relative group">
-          <Link href={"/profile"}>Profile</Link>
+        <div
+          className="relative group cursor-pointer"
+          onClick={() => {
+            localStorage.clear();
+            sessionStorage.clear();
+            deleteCookie("token");
+            router.push("/");
+          }}
+        >
+          <h1>LogOut</h1>
           <span className="w-0 h-0.5 absolute bottom-0 left-0 bg-foreground group-hover:w-full group-active:w-full transition-all duration-200 rounded-md"></span>
         </div>
       </div>

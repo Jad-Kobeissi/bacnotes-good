@@ -87,7 +87,7 @@ export async function POST(req: Request) {
       files.map(async (file) => {
         const imageRef = ref(
           storage,
-          `images/${post.id}--${crypto.randomUUID()}`
+          `${process.env.postsBucket}/${post.id}--${crypto.randomUUID()}`
         );
         await uploadBytes(imageRef, file);
         return (await getDownloadURL(imageRef)) as string;

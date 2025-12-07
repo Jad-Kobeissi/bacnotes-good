@@ -18,10 +18,7 @@ export default function SignUp() {
   const regex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
   const { setUser } = useUser();
   const router = useRouter();
-  useEffect(() => {
-    if (!regex.test(email)) setError("Invalid Email");
-    else setError("");
-  }, [email]);
+
   useEffect(() => {
     if (password != confirmPass) setError("Passwords Don't match");
     else setError("");
