@@ -10,7 +10,15 @@ export async function POST(req: Request) {
     if (!email || !password || isEmpty([email, password]))
       return new Response("Please Fill all Fields", { status: 400 });
 
-    const user = await prisma.user.findUnique({ where: { email } });
+    const user = await prisma.user.findUnique({
+      where: { email },
+      include: {
+        posts: true,
+        viewedPosts: true,
+        followers: true,
+        following: true,
+      },
+    });
 
     if (!user) return new Response("User not found", { status: 404 });
 
@@ -20,7 +28,7 @@ export async function POST(req: Request) {
 
     const token = await sign(
       { id: user.id, username: user.username, email },
-      process.env.JWT_SECRET as string
+      process.env.JWT_SECRET as string,
     );
 
     return Response.json({ token, user });

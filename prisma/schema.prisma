@@ -18,6 +18,8 @@ model User {
   email String @unique
   password String
   posts Post[]
+  followers User[] @relation("followers")
+  following User[] @relation("followers")
   viewedPosts Post[] @relation("viewedUsers")
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt

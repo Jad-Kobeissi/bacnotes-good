@@ -4,7 +4,10 @@ export interface TUser {
   email: String;
   password: String;
   posts: TPost[];
+  followers: TUser[];
+  following: TUser[];
   viewedPosts: TPost[];
+
   createdAt: Date;
 }
 export interface TPost {
