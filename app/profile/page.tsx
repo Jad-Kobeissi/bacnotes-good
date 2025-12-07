@@ -27,7 +27,7 @@ export default function Profile() {
         setPosts((prev) => {
           const newPosts = [...prev, ...res.data];
           const filteredPosts = newPosts.filter(
-            (post) => post.user.id === user?.id,
+            (post) => post.authorId === user?.id,
           );
           return filteredPosts;
         });

@@ -1,8 +1,11 @@
+import { useRouter } from "next/navigation";
 import { TPost } from "./types";
 
 export default function Post({ post }: { post: TPost }) {
+  const router = useRouter();
   return (
     <div
+      onClick={() => router.push(`/post/${post.id}`)}
       key={post.id as string}
       className="border border-gray-300 rounded-lg p-20"
     >
@@ -15,8 +18,11 @@ export default function Post({ post }: { post: TPost }) {
             key={index}
             src={image as string}
             alt={post.title as string}
-            className="snap-center w-full"
-            onClick={() => window.open(image as string, "_blank")}
+            className="snap-center"
+            onClick={(e) => {
+              e.stopPropagation();
+              window.open(image as string, "_blank");
+            }}
           />
         ))}
       </div>
