@@ -12,7 +12,7 @@ export default function Post({ post }: { post: TPost }) {
       <h1 className="text-[1.5rem]">{post.author.username}</h1>
       <h2 className="font-semibold">{post.title}</h2>
       <p className="font-medium text-(--secondary-text)">{post.content}</p>
-      <div className="flex gap-4 overflow-x-auto snap-x snap-mandatory mt-4 w-3/4 max-[700px]:w-full">
+      <div className="flex gap-4 overflow-x-auto snap-x snap-mandatory mt-4 w-1/2 max-[700px]:w-full">
         {post.imagesUrl.map((image, index) => (
           <img
             key={index}

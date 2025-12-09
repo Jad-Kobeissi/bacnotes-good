@@ -10,6 +10,9 @@ export async function GET(
       return new Response("Unauthorized", { status: 401 });
     const { id } = await params;
 
+    const url = new URL(req.url);
+    const page = parseInt(url.searchParams.get("page") || "1");
+    const skip = (page - 1) * 5;
     const posts = await prisma.post.findMany({
       where: {
         authorId: id,
@@ -17,6 +20,11 @@ export async function GET(
       include: {
         author: true,
         viewedUsers: true,
+      },
+      skip,
+      take: 5,
+      orderBy: {
+        createdAt: "desc",
       },
     });
 

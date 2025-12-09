@@ -9,10 +9,13 @@ import Link from "next/link";
 import Nav from "../Nav";
 import Error from "../Error";
 import Post from "../Post";
+import InfiniteScroll from "react-infinite-scroll-component";
+import Loading from "../Loading";
 
 export default function Home() {
   const [posts, setPosts] = useState<TPost[]>([]);
   const [error, setError] = useState("");
+  const [hasMore, setHasMore] = useState(true);
   const files = useRef<HTMLInputElement>(null);
   const textarearef = useRef<HTMLTextAreaElement>(null);
   const router = useRouter();
@@ -28,10 +31,16 @@ export default function Home() {
           const newPosts = [...prev, ...res.data];
           sessionStorage.setItem("posts", JSON.stringify(newPosts));
 
-          return newPosts;
+          const filteredPosts: any[] = Array.from(
+            new Map<string, TPost>(
+              newPosts.map((p) => [p.id, p]) as any,
+            ).values(),
+          );
+          return filteredPosts;
         });
       })
       .catch((err) => {
+        setHasMore(false);
         setError(err.response.data);
       });
   };
@@ -42,7 +51,18 @@ export default function Home() {
     const postsStorage = JSON.parse(sessionStorage.getItem("posts") as string);
     if (!postsStorage) return;
     setTimeout(() => {
-      setPosts((prev) => [...postsStorage, ...prev]);
+      setPosts((prev) => {
+        const newPosts = [...prev, ...postsStorage];
+
+        const filteredPosts = Array.from(
+          new Map<string, TPost>(
+            newPosts.map((p) => [p.id, p]) as any,
+          ).values(),
+        );
+
+        console.log(filteredPosts);
+        return filteredPosts as any;
+      });
     }, 0);
   }, []);
   const handleInput = () => {
@@ -99,11 +119,20 @@ export default function Home() {
               Post
             </button>
           </form>
-          <div>
+          <InfiniteScroll
+            dataLength={posts.length}
+            next={() => {
+              fetchPosts();
+            }}
+            hasMore={hasMore}
+            loader={
+              <Loading className="flex items-center justify-center mt-[10vh]" />
+            }
+          >
             {posts.map((post) => (
               <Post key={post.id as string} post={post} />
             ))}
-          </div>
+          </InfiniteScroll>
         </div>
       </div>
 

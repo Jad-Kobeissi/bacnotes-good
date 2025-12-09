@@ -15,9 +15,10 @@ export default function Profile() {
   const [error, setError] = useState("");
   const [posts, setPosts] = useState<TPost[]>([]);
   const [hasMore, setHasMore] = useState(true);
+  const [page, setPage] = useState(1);
   const fetchPosts = () => {
     axios
-      .get(`/api/posts/user/${user?.id}`, {
+      .get(`/api/posts/user/${user?.id}?page=${page}`, {
         headers: {
           Authorization: `Bearer ${getCookie("token")}`,
         },
@@ -26,13 +27,16 @@ export default function Profile() {
         console.log(res.data);
         setPosts((prev) => {
           const newPosts = [...prev, ...res.data];
-          const filteredPosts = newPosts.filter(
-            (post) => post.authorId === user?.id,
+          const filteredPosts: any[] = Array.from(
+            new Map(newPosts.map((p) => [p.id, p]) as any).values(),
           );
+
           return filteredPosts;
         });
+        setPage((prev) => prev + 1);
       })
       .catch((err) => {
+        console.log(err);
         setError(err.response.data);
         setHasMore(false);
       });
@@ -58,17 +62,17 @@ export default function Profile() {
           <InfiniteScroll
             hasMore={hasMore}
             loader={
-              <Loading className="flex items-center justify-center mt-[20vh]" />
+              <Loading className="flex items-center justify-center mt-[20vh] w-full" />
             }
             next={fetchPosts}
             dataLength={posts.length}
-            className="flex justify-center"
+            className="flex justify-center flex-col w-3/4 overflow-hidden my-[20vh] py-5 px-10"
           >
             {posts.map((post) => (
               <Post key={post.id as string} post={post} />
             ))}
           </InfiniteScroll>
-          {error && <Error className="text-center mt-[10vh]">{error}</Error>}
+          {error && <Error className="text-center my-[10vh]">{error}</Error>}
         </>
       )}
     </>
