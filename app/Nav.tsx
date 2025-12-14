@@ -14,7 +14,7 @@ export default function Nav() {
           BacNotes
         </h1>
       </div>
-      <div className="flex justify-end gap-6 items-center w-1/2">
+      <div className="flex justify-end gap-6 items-center ">
         <div className="relative group">
           <Link href={"/home"}>Home</Link>
           <span className="w-0 h-0.5 absolute bottom-0 left-0 bg-foreground group-hover:w-full group-active:w-full transition-all duration-200 rounded-md"></span>

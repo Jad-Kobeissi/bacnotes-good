@@ -128,6 +128,7 @@ export default function Home() {
             loader={
               <Loading className="flex items-center justify-center mt-[10vh]" />
             }
+            className="flex justify-center flex-col min-[600px]:w-3/4 overflow-hidden my-[20vh] py-5 px-10"
           >
             {posts.map((post) => (
               <Post key={post.id as string} post={post} />

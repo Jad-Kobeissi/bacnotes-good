@@ -7,22 +7,17 @@ export default function Post({ post }: { post: TPost }) {
     <div
       onClick={() => router.push(`/post/${post.id}`)}
       key={post.id as string}
-      className="border border-gray-300 rounded-lg p-20"
+      className="border border-gray-300 flex flex-col gap-2 items-center justify-center rounded-lg p-20 w-full"
     >
       <h1 className="text-[1.5rem]">{post.author.username}</h1>
       <h2 className="font-semibold">{post.title}</h2>
       <p className="font-medium text-(--secondary-text)">{post.content}</p>
-      <div className="flex gap-4 overflow-x-auto snap-x snap-mandatory mt-4 w-1/2 max-[700px]:w-full">
-        {post.imagesUrl.map((image, index) => (
+      <div className="border flex max-[600px]:w-[120%] max-[400px]:w-[200%] w-1/2 overflow-x-auto snap-x snap-mandatory gap-4">
+        {post.imagesUrl.map((image, key) => (
           <img
-            key={index}
-            src={image as string}
-            alt={post.title as string}
-            className="snap-center"
-            onClick={(e) => {
-              e.stopPropagation();
-              window.open(image as string, "_blank");
-            }}
+            src={image}
+            key={key}
+            className=" border border-red-500 snap-center "
           />
         ))}
       </div>
