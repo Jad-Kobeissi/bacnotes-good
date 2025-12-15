@@ -1,5 +1,6 @@
 "use client";
 import Error from "@/app/Error";
+import moment from "moment";
 import Loading from "@/app/Loading";
 import Nav from "@/app/Nav";
 import { TPost } from "@/app/types";
@@ -49,6 +50,9 @@ export default function PostPage({
         <Loading />
       ) : (
         <div className="pt-[20vh] flex items-center justify-center flex-col gap-2">
+          <h1 className="text-[1rem] font-medium">
+            Username: {post.author.username}
+          </h1>
           {post.title && (
             <h1 className="font-semibold text-[2rem]">{post.title}</h1>
           )}
@@ -63,6 +67,9 @@ export default function PostPage({
               />
             ))}
           </div>
+          <h1 className="text-(--secondary-text)">
+            {moment(post.createdAt).fromNow()}
+          </h1>
         </div>
       )}
       {error && <Error>{error}</Error>}

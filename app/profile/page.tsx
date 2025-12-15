@@ -28,7 +28,7 @@ export default function Profile() {
         setPosts((prev) => {
           const newPosts = [...prev, ...res.data];
           const filteredPosts: any[] = Array.from(
-            new Map(newPosts.map((p) => [p.id, p]) as any).values(),
+            new Map(newPosts.map((p) => [p.id, p]) as any).values()
           );
 
           return filteredPosts;
@@ -62,11 +62,13 @@ export default function Profile() {
           <InfiniteScroll
             hasMore={hasMore}
             loader={
-              <Loading className="flex items-center justify-center mt-[20vh] w-full" />
+              <div className="flex w-full justify-center">
+                <Loading className="flex items-center justify-center mt-[20vh] w-fit" />
+              </div>
             }
             next={fetchPosts}
             dataLength={posts.length}
-            className="flex justify-center flex-col min-[600px]:w-3/4 overflow-hidden my-[20vh] py-5 px-10"
+            className="flex justify-center flex-col min-[600px]:w-3/4 overflow-hidden my-[20vh] py-5 px-10 gap-4"
           >
             {posts.map((post) => (
               <Post key={post.id as string} post={post} />

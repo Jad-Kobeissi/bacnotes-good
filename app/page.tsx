@@ -78,7 +78,7 @@ function Home() {
           </Link>
           <Link
             href={"#features"}
-            className="border border-(--secondary-text) text-[1rem] px-5 py-2 rounded-md"
+            className="px-5 py-1 font-semibold border border-[#e0e1e2] rounded-md hover:bg-[#e0e1e2c5] active:bg-[#e0e1e2c5] transition-all text-[1.2rem]"
           >
             Learn More
           </Link>

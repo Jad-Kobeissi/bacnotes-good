@@ -18,6 +18,7 @@ export default function Home() {
   const [hasMore, setHasMore] = useState(true);
   const files = useRef<HTMLInputElement>(null);
   const textarearef = useRef<HTMLTextAreaElement>(null);
+  const title = useRef<HTMLInputElement>(null);
   const router = useRouter();
   const fetchPosts = () => {
     axios
@@ -33,8 +34,8 @@ export default function Home() {
 
           const filteredPosts: any[] = Array.from(
             new Map<string, TPost>(
-              newPosts.map((p) => [p.id, p]) as any,
-            ).values(),
+              newPosts.map((p) => [p.id, p]) as any
+            ).values()
           );
           return filteredPosts;
         });
@@ -55,9 +56,7 @@ export default function Home() {
         const newPosts = [...prev, ...postsStorage];
 
         const filteredPosts = Array.from(
-          new Map<string, TPost>(
-            newPosts.map((p) => [p.id, p]) as any,
-          ).values(),
+          new Map<string, TPost>(newPosts.map((p) => [p.id, p]) as any).values()
         );
 
         console.log(filteredPosts);
@@ -81,6 +80,7 @@ export default function Home() {
             onSubmit={(e) => {
               e.preventDefault();
               const formData = new FormData();
+              formData.append("title", title.current?.value as string);
               formData.append("content", textarearef.current?.value as string);
               Array.from(files.current?.files || []).map((file) => {
                 formData.append("files", file);
@@ -93,10 +93,19 @@ export default function Home() {
                 })
                 .then((res) => {
                   alert("Post created successfully!");
+                  if (title.current) title.current.value = "";
+                  if (textarearef.current) textarearef.current.value = "";
+                  if (files.current) files.current.value = "";
                 });
             }}
           >
             <div className="w-full">
+              <input
+                type="text"
+                placeholder="Title"
+                ref={title}
+                className="placeholder:font-semibold font-semibold w-full"
+              />
               <textarea
                 ref={textarearef}
                 onInput={handleInput}
@@ -128,7 +137,7 @@ export default function Home() {
             loader={
               <Loading className="flex items-center justify-center mt-[10vh]" />
             }
-            className="flex justify-center flex-col min-[600px]:w-3/4 overflow-hidden my-[20vh] py-5 px-10"
+            className="flex justify-center flex-col min-[600px]:w-3/4 overflow-hidden my-[20vh] py-5 px-10 gap-4"
           >
             {posts.map((post) => (
               <Post key={post.id as string} post={post} />
@@ -137,9 +146,7 @@ export default function Home() {
         </div>
       </div>
 
-      {error && (
-        <Error className="text-[1.5rem] text-center my-[20vh]">{error}</Error>
-      )}
+      {error && <Error className="text-[1.5rem] text-center">{error}</Error>}
     </>
   );
 }
