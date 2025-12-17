@@ -7,7 +7,7 @@ import { deleteCookie } from "cookies-next";
 export default function Nav() {
   const router = useRouter();
   return (
-    <nav className="flex items-center gap-2 justify-between px-4  fixed w-screen bg-background ">
+    <nav className="flex items-center gap-2 justify-between px-4  fixed w-screen bg-background">
       <div className="flex items-center gap-1">
         <Cap className="w-15 max-[900px]:w-10 fill-(--brand)" />
         <h1 className="text-[1.5rem] max-[900px]:text-[1.2rem] font-bold">

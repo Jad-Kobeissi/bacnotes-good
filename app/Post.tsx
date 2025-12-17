@@ -10,7 +10,13 @@ export default function Post({ post }: { post: TPost }) {
       key={post.id as string}
       className="border border-gray-300 flex flex-col gap-2 items-center justify-center rounded-lg p-20 w-full"
     >
-      <h1 className="text-[1rem] font-medium">
+      <h1
+        onClick={(e) => {
+          e.stopPropagation();
+          router.push(`/user/${post.author.id}`);
+        }}
+        className="text-[1rem] font-medium"
+      >
         Username: {post.author.username}
       </h1>
       {post.title && (

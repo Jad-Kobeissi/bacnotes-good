@@ -109,7 +109,7 @@ function Features() {
         initial={{ opacity: 0, y: 30 }}
         animate={inView ? { opacity: 1, y: 0 } : {}}
         transition={{ duration: 0.3, delay: index * 0.2 }}
-        className="shadow-lg p-4"
+        className="shadow-lg p-4 mx-4"
       >
         <img src={icon} alt="dsfgdfg" className="w-15" />
         <h1 className="text-[2rem] font-semibold">{title}</h1>
