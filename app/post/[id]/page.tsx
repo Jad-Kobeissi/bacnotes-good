@@ -8,6 +8,7 @@ import axios from "axios";
 import { getCookie } from "cookies-next";
 import React, { useEffect, useState } from "react";
 import { motion } from "motion/react";
+import { useUser } from "@/app/contexts/UserContext";
 
 export default function PostPage({
   params,
@@ -18,6 +19,8 @@ export default function PostPage({
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
   const [post, setPost] = useState<TPost | null>(null);
+  const [following, setFollowing] = useState<boolean | null>(null);
+  const { user, setUser } = useUser();
   const fetchPosts = () => {
     setError("");
     setLoading(true);
@@ -42,6 +45,15 @@ export default function PostPage({
       fetchPosts();
     }, 0);
   }, []);
+  useEffect(() => {
+    if (!user || !post) return;
+
+    if (user.following.some((u) => u.id === post.author.id)) {
+      setFollowing(true);
+    } else {
+      setFollowing(false);
+    }
+  }, [post, user]);
   return (
     <>
       <Nav />
@@ -51,13 +63,72 @@ export default function PostPage({
         <Loading />
       ) : (
         <div className="pt-[20vh] flex items-center justify-center flex-col gap-2">
-          <motion.h1
-            whileHover={{ scale: 1.05 }}
-            whileTap={{ scale: 0.9 }}
-            className="text-[1rem] font-semibold underline cursor-pointer text-(--brand)"
-          >
-            {post.author.username}
-          </motion.h1>
+          <div className="flex items-center gap-4">
+            <motion.h1
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.9 }}
+              className="text-[1rem] font-semibold underline cursor-pointer text-(--brand)"
+            >
+              {post.author.username}
+            </motion.h1>
+            {following ? (
+              <button
+                className="bg-(--brand) px-4 py-1 rounded-md text-background border border-(--brand) hover:bg-transparent active:bg-transparent hover:text-(--brand) active:text-(--brand) transition-all duration-200"
+                onClick={(e) => {
+                  e.stopPropagation();
+                  axios
+                    .post(
+                      `/api/user/unfollow/${post.author.id}`,
+                      {},
+                      {
+                        headers: {
+                          Authorization: `Bearer ${getCookie("token")}`,
+                        },
+                      }
+                    )
+                    .then((res) => {
+                      setFollowing(false);
+                      alert(`Unfollowed ${post.author.username} successfully`);
+                      setUser(res.data);
+                    })
+                    .catch((err) => {
+                      setFollowing(false);
+                      alert("Error unfollowing user");
+                    });
+                }}
+              >
+                Unfollow
+              </button>
+            ) : (
+              <button
+                className="bg-(--brand) px-4 py-1 rounded-md text-background border border-(--brand) hover:bg-transparent active:bg-transparent hover:text-(--brand) active:text-(--brand) transition-all duration-200"
+                onClick={(e) => {
+                  e.stopPropagation();
+                  axios
+                    .post(
+                      `/api/user/follow/${post.author.id}`,
+                      {},
+                      {
+                        headers: {
+                          Authorization: `Bearer ${getCookie("token")}`,
+                        },
+                      }
+                    )
+                    .then((res) => {
+                      setFollowing(true);
+                      alert(`Followed ${post.author.username} successfully`);
+                      setUser(res.data);
+                    })
+                    .catch((err) => {
+                      alert("Error following user");
+                      setFollowing(false);
+                    });
+                }}
+              >
+                Follow
+              </button>
+            )}
+          </div>
           {post.title && (
             <h1 className="font-semibold text-[2rem]">{post.title}</h1>
           )}

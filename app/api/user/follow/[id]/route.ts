@@ -18,6 +18,7 @@ export async function GET(
       where: { id: userId },
       select: {
         followers: true,
+        following: true,
       },
     });
 
@@ -73,6 +74,10 @@ export async function POST(
             id: userIdToFollow,
           },
         },
+      },
+      include: {
+        followers: true,
+        following: true,
       },
     });
     await prisma.user.update({

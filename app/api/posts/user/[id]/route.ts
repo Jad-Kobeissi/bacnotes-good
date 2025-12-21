@@ -2,7 +2,7 @@ import { prisma } from "@/app/api/init";
 import { verify } from "jsonwebtoken";
 export async function GET(
   req: Request,
-  { params }: { params: Promise<{ id: string }> },
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
     const authHeader = req.headers.get("Authorization")?.split(" ")[1];
@@ -18,7 +18,14 @@ export async function GET(
         authorId: id,
       },
       include: {
-        author: true,
+        author: {
+          include: {
+            followers: true,
+            following: true,
+            posts: true,
+            viewedPosts: true,
+          },
+        },
         viewedUsers: true,
       },
       skip,
