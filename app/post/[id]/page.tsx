@@ -7,6 +7,7 @@ import { TPost } from "@/app/types";
 import axios from "axios";
 import { getCookie } from "cookies-next";
 import React, { useEffect, useState } from "react";
+import { motion } from "motion/react";
 
 export default function PostPage({
   params,
@@ -50,13 +51,19 @@ export default function PostPage({
         <Loading />
       ) : (
         <div className="pt-[20vh] flex items-center justify-center flex-col gap-2">
-          <h1 className="text-[1rem] font-medium">
-            Username: {post.author.username}
-          </h1>
+          <motion.h1
+            whileHover={{ scale: 1.05 }}
+            whileTap={{ scale: 0.9 }}
+            className="text-[1rem] font-semibold underline cursor-pointer text-(--brand)"
+          >
+            {post.author.username}
+          </motion.h1>
           {post.title && (
             <h1 className="font-semibold text-[2rem]">{post.title}</h1>
           )}
-          <h1 className="text-[1.2rem]">{post.content}</h1>
+          <p className="text-[1.1rem] text-(--secondary-text)">
+            {post.content}
+          </p>
           <div className="flex gap-4 overflow-x-auto snap-x snap-mandatory mt-4 w-1/4 max-[700px]:w-full">
             {post.imagesUrl.map((url) => (
               <img
