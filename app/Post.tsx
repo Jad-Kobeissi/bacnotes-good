@@ -11,7 +11,8 @@ export default function Post({ post }: { post: TPost }) {
   const router = useRouter();
   const { user, setUser } = useUser();
   const [following, setFollowing] = useState<boolean | null>(null);
-
+  const [liked, setLiked] = useState<boolean | null>(null);
+  const [likes, setLikes] = useState<number>(post.likes as number);
   useEffect(() => {
     if (!user || !post) return;
 
@@ -19,6 +20,12 @@ export default function Post({ post }: { post: TPost }) {
       setFollowing(true);
     } else {
       setFollowing(false);
+    }
+
+    if (post.likedUsers.some((u) => u.id === user.id)) {
+      setLiked(true);
+    } else {
+      setLiked(false);
     }
   }, [user, post]);
   return (
@@ -39,7 +46,7 @@ export default function Post({ post }: { post: TPost }) {
         >
           {post.author.username}
         </motion.h1>
-        {following ? (
+        {user && user.id === post.authorId ? null : following ? (
           <button
             className="bg-(--brand) px-4 py-1 rounded-md text-background border border-(--brand) hover:bg-transparent active:bg-transparent hover:text-(--brand) active:text-(--brand) transition-all duration-200"
             onClick={(e) => {
@@ -113,6 +120,68 @@ export default function Post({ post }: { post: TPost }) {
             />
           ))}
         </div>
+      </div>
+      <div className="flex gap-4 items-center">
+        <h1>{likes as number}</h1>
+        {liked ? (
+          <button
+            className="bg-(--brand) px-4 py-1 rounded-md text-background border border-(--brand) hover:bg-transparent active:bg-transparent hover:text-(--brand) active:text-(--brand) transition-all duration-200"
+            onClick={(e) => {
+              e.stopPropagation();
+              setLiked(false);
+              setLikes((prev) => prev - 1);
+              axios
+                .post(
+                  `/api/posts/dislike/${post.id}`,
+                  {},
+                  {
+                    headers: {
+                      Authorization: `Bearer ${getCookie("token")}`,
+                    },
+                  }
+                )
+                .then(() => {
+                  alert("Post liked");
+                })
+                .catch((err) => {
+                  alert("Error disliking post");
+                  setLiked(false);
+                  setLikes((prev) => prev + 1);
+                });
+            }}
+          >
+            Dislike
+          </button>
+        ) : (
+          <button
+            className="bg-(--brand) px-4 py-1 rounded-md text-background border border-(--brand) hover:bg-transparent active:bg-transparent hover:text-(--brand) active:text-(--brand) transition-all duration-200"
+            onClick={(e) => {
+              e.stopPropagation();
+              setLiked(true);
+              setLikes((prev) => prev + 1);
+              axios
+                .post(
+                  `/api/posts/like/${post.id}`,
+                  {},
+                  {
+                    headers: {
+                      Authorization: `Bearer ${getCookie("token")}`,
+                    },
+                  }
+                )
+                .then(() => {
+                  alert("Post liked");
+                })
+                .catch((err) => {
+                  alert("Error liking post");
+                  setLiked(false);
+                  setLikes((prev) => prev - 1);
+                });
+            }}
+          >
+            Like
+          </button>
+        )}
       </div>
       <h1 className="text-(--secondary-text)">
         {moment(post.createdAt).fromNow()}

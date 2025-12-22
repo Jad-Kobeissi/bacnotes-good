@@ -16,6 +16,8 @@ export interface TPost {
   content: String;
   createdAt: Date;
   updatedAt: Date;
+  likes: Number;
+  likedUsers: TUser[];
   author: TUser;
   authorId: String;
   imagesUrl: String[];

@@ -34,12 +34,13 @@ export async function POST(req: Request) {
         viewedPosts: true,
         followers: true,
         following: true,
+        likedPosts: true,
       },
     });
 
     const token = await sign(
       { username, id: user.id },
-      process.env.JWT_SECRET as string,
+      process.env.JWT_SECRET as string
     );
 
     return Response.json({ token, user });

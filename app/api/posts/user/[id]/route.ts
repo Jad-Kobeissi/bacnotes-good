@@ -27,6 +27,7 @@ export async function GET(
           },
         },
         viewedUsers: true,
+        likedUsers: true,
       },
       skip,
       take: 5,

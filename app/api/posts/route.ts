@@ -37,6 +37,7 @@ export async function GET(req: Request) {
             posts: true,
           },
         },
+        likedUsers: true,
       },
     });
 

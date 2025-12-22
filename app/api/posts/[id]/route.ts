@@ -3,7 +3,7 @@ import { prisma } from "../../init";
 
 export async function GET(
   req: Request,
-  { params }: { params: Promise<{ id: string }> },
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
     const authHeader = req.headers.get("Authorization")?.split(" ")[1];
@@ -20,6 +20,7 @@ export async function GET(
       include: {
         viewedUsers: true,
         author: true,
+        likedUsers: true,
       },
     });
 

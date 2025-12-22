@@ -20,6 +20,9 @@ export async function POST(
       where: {
         id: postToLike,
       },
+      include: {
+        likedUsers: true,
+      },
     });
 
     if (!post) return new Response("Post not found", { status: 404 });
@@ -37,6 +40,10 @@ export async function POST(
       },
     });
     if (!user) return new Response("User not found", { status: 404 });
+
+    if (post.likedUsers.some((u) => u.id === user.id)) {
+      return new Response("Post already liked", { status: 400 });
+    }
 
     await prisma.post.update({
       where: {

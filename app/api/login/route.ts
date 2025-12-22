@@ -17,6 +17,7 @@ export async function POST(req: Request) {
         viewedPosts: true,
         followers: true,
         following: true,
+        likedPosts: true,
       },
     });
 
@@ -28,7 +29,7 @@ export async function POST(req: Request) {
 
     const token = await sign(
       { id: user.id, username: user.username, email },
-      process.env.JWT_SECRET as string,
+      process.env.JWT_SECRET as string
     );
 
     return Response.json({ token, user });
