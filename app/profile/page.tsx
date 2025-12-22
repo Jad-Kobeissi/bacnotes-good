@@ -68,7 +68,7 @@ export default function Profile() {
             }
             next={fetchPosts}
             dataLength={posts.length}
-            className="flex justify-center flex-col min-[600px]:w-3/4 overflow-hidden my-[20vh] py-5 px-10 gap-4"
+            className="flex justify-center flex-col overflow-hidden my-[20vh] py-5 px-10 gap-4"
           >
             {posts.map((post) => (
               <Post key={post.id as string} post={post} />
