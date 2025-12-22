@@ -3,6 +3,7 @@ import { prisma, storage } from "../init";
 import { TJWT } from "@/app/types";
 import { isEmpty } from "../isEmpty";
 import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
+import { algoliaAdmin, algoliaClient } from "@/lib/algolia";
 
 export async function GET(req: Request) {
   try {
@@ -100,17 +101,36 @@ export async function POST(req: Request) {
       })
     );
 
-    await prisma.post.update({
+    const newPost = await prisma.post.update({
       where: {
         id: post.id,
       },
       data: {
         imagesUrl: filesUrl,
       },
+      include: {
+        author: true,
+        likedUsers: true,
+        viewedUsers: true,
+      },
     });
+
+    algoliaAdmin
+      .saveObject({
+        indexName: process.env.POSTS_INDEX_NAME!,
+        body: {
+          objectID: newPost.id,
+          ...newPost,
+        },
+      })
+      .then(() => {
+        console.log("done");
+      });
 
     return Response.json(post);
   } catch (error: any) {
+    console.log(error);
+
     return new Response(error, { status: 500 });
   }
 }

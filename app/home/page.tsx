@@ -1,4 +1,12 @@
 "use client";
+
+import { algoliasearch } from "algoliasearch";
+
+const searchClient = algoliasearch(
+  process.env.NEXT_PUBLIC_ALGOLIA_APP_ID!,
+  process.env.NEXT_PUBLIC_ALGOLIA_SEARCH_KEY!
+);
+
 import { useEffect, useRef, useState } from "react";
 import { TPost } from "../types";
 import axios from "axios";
@@ -127,6 +135,12 @@ export default function Home() {
               Post
             </button>
           </form>
+          <button
+            onClick={() => router.push("/search")}
+            className="bg-(--brand) text-background rounded-md mx-4 w-fit px-4 py-1 border border-(--brand) hover:bg-transparent active:bg-transparent hover:text-(--brand) active:text-(--brand) transition-all duration-200 "
+          >
+            Go To Search
+          </button>
           <InfiniteScroll
             dataLength={posts.length}
             next={() => {
