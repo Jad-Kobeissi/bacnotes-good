@@ -24,8 +24,9 @@ export async function GET(
 
     if (!user) return new Response("User not found", { status: 404 });
 
-    if (user.followers.length == 0) return new Response("No followers", { status: 404 });
-    return Response.json(user);
+    if (user.followers.length == 0)
+      return new Response("No followers", { status: 404 });
+    return Response.json(user.followers);
   } catch (error: any) {
     return new Response(error, { status: 500 });
   }
