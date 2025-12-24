@@ -22,7 +22,10 @@ export async function GET(
       },
     });
 
-    return Response.json(user);
+    if (!user) return new Response("User not found", { status: 404 });
+    if (user.following.length == 0) return new Response("No following", { status: 404 });
+
+    return Response.json(user?.following);
   } catch (error: any) {
     return new Response(error, { status: 500 });
   }

@@ -1,4 +1,5 @@
 "use client";
+import { motion } from "motion/react";
 import InfiniteScroll from "react-infinite-scroll-component";
 import { useEffect, useState } from "react";
 import { useUser } from "../contexts/UserContext";
@@ -9,6 +10,7 @@ import axios from "axios";
 import { getCookie } from "cookies-next";
 import Post from "../Post";
 import Error from "../Error";
+import { useRouter } from "next/navigation";
 
 export default function Profile() {
   const { user } = useUser();
@@ -16,6 +18,7 @@ export default function Profile() {
   const [posts, setPosts] = useState<TPost[]>([]);
   const [hasMore, setHasMore] = useState(true);
   const [page, setPage] = useState(1);
+  const router = useRouter();
   const fetchPosts = () => {
     axios
       .get(`/api/posts/user/${user?.id}?page=${page}`, {
@@ -55,8 +58,22 @@ export default function Profile() {
           <div className="flex flex-col items-center justify-center pt-[30vh]">
             <h1 className="text-[1.2rem] font-semibold">{user.username}</h1>
             <div className="flex text-gray-600 gap-4 font-medium">
-              <h1>Followers: {user.followers.length}</h1>
-              <h1>Following: {user.following.length}</h1>
+              <motion.h1
+                onClick={() => router.push(`/user/followers/${user.id}`)}
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.9 }}
+              >
+                Followers: {user.followers.length}
+              </motion.h1>
+              <motion.h1
+                onClick={() => {
+                  router.push(`/user/following/${user.id}`);
+                }}
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.9 }}
+              >
+                Following: {user.following.length}
+              </motion.h1>
             </div>
           </div>
           <InfiniteScroll
