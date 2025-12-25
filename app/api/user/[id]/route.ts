@@ -2,6 +2,7 @@ import { verify, decode } from "jsonwebtoken";
 import { prisma } from "../../init";
 import { TJWT } from "@/app/types";
 import { isEmpty } from "../../isEmpty";
+import { algoliaAdmin, algoliaClient } from "@/lib/algolia";
 
 export async function GET(
   req: Request,
@@ -48,7 +49,23 @@ export async function DELETE(
       where: {
         id,
       },
+      include: {
+        posts: true,
+      },
     });
+
+    await Promise.all(
+      (user?.posts || []).map((post) => {
+        console.log("done");
+
+        return algoliaAdmin.deleteBy({
+          indexName: process.env.POSTS_INDEX_NAME!,
+          deleteByParams: {
+            filters: `id:"${post.id}"`,
+          },
+        });
+      })
+    );
 
     if (!user) return new Response("User not found", { status: 404 });
     if (decoded.id !== id) return new Response("Unauthorized", { status: 401 });
@@ -64,7 +81,7 @@ export async function DELETE(
     return new Response(error, { status: 500 });
   }
 }
-export async function UPDATE(
+export async function PUT(
   req: Request,
   { params }: { params: Promise<{ id: string }> }
 ) {
@@ -86,17 +103,28 @@ export async function UPDATE(
       return new Response("Unauthorized", { status: 401 });
     const { username, email } = await req.json();
 
-    await prisma.user.update({
+    const newUser = await prisma.user.update({
       where: {
         id,
       },
       data: {
-        username: username || username !== "" ? username : user.username,
-        email: email || email !== "" ? email : user.email,
+        username:
+          username && username !== "" && username !== user.username
+            ? username
+            : user.username,
+        email:
+          email && email !== "" && email !== user.email ? email : user.email,
+      },
+      include: {
+        followers: true,
+        following: true,
+        likedPosts: true,
+        posts: true,
+        viewedPosts: true,
       },
     });
 
-    return new Response("User updated");
+    return Response.json(newUser);
   } catch (error: any) {
     return new Response(error, { status: 500 });
   }

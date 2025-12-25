@@ -3,7 +3,7 @@ import { prisma, storage } from "../init";
 import { TJWT } from "@/app/types";
 import { isEmpty } from "../isEmpty";
 import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
-import { algoliaAdmin, algoliaClient } from "@/lib/algolia";
+import { algoliaAdmin } from "@/lib/algolia";
 
 export async function GET(req: Request) {
   try {

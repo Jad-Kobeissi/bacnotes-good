@@ -2,6 +2,7 @@ import { decode, verify } from "jsonwebtoken";
 import { prisma, storage } from "../../init";
 import { TJWT } from "@/app/types";
 import { deleteObject, ref } from "firebase/storage";
+import { algoliaAdmin } from "@/lib/algolia";
 
 export async function GET(
   req: Request,
@@ -57,6 +58,13 @@ export async function DELETE(
     await prisma.post.delete({
       where: {
         id,
+      },
+    });
+
+    await algoliaAdmin.deleteBy({
+      indexName: process.env.POSTS_INDEX_NAME!,
+      deleteByParams: {
+        filters: `id:"${post.id}"`,
       },
     });
 
