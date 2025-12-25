@@ -1,6 +1,7 @@
 import { decode, verify } from "jsonwebtoken";
-import { prisma } from "../../init";
+import { prisma, storage } from "../../init";
 import { TJWT } from "@/app/types";
+import { deleteObject, ref } from "firebase/storage";
 
 export async function GET(
   req: Request,
@@ -58,6 +59,12 @@ export async function DELETE(
         id,
       },
     });
+
+    await Promise.all(
+      post.imagesUrl.map((url) => {
+        deleteObject(ref(storage, url));
+      })
+    );
     return new Response("Post deleted successfully", { status: 200 });
   } catch (error: any) {
     return new Response(error, { status: 500 });
