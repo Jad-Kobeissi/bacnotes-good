@@ -67,161 +67,165 @@ export default function PostPage({
     <>
       <Nav />
       {loading ? (
-        <Loading />
-      ) : !post ? (
-        <Loading />
+        <Loading className="w-screen pt-[30vh] flex items-center justify-center" />
       ) : (
-        <div className="pt-[20vh] flex items-center justify-center flex-col gap-2">
-          <div className="flex items-center gap-4">
-            <motion.h1
-              whileHover={{ scale: 1.05 }}
-              whileTap={{ scale: 0.9 }}
-              className="text-[1rem] font-semibold underline cursor-pointer text-(--brand)"
-            >
-              {post.author.username}
-            </motion.h1>
-            {following ? (
-              <button
-                className="bg-(--brand) px-4 py-1 rounded-md text-background border border-(--brand) hover:bg-transparent active:bg-transparent hover:text-(--brand) active:text-(--brand) transition-all duration-200"
-                onClick={(e) => {
-                  e.stopPropagation();
-                  axios
-                    .post(
-                      `/api/user/unfollow/${post.author.id}`,
-                      {},
-                      {
-                        headers: {
-                          Authorization: `Bearer ${getCookie("token")}`,
-                        },
-                      }
-                    )
-                    .then((res) => {
-                      setFollowing(false);
-                      alert(`Unfollowed ${post.author.username} successfully`);
-                      setUser(res.data);
-                    })
-                    .catch((err) => {
-                      setFollowing(false);
-                      alert("Error unfollowing user");
-                    });
-                }}
+        post && (
+          <div className="pt-[20vh] flex items-center justify-center flex-col gap-2">
+            <div className="flex items-center gap-4">
+              <motion.h1
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.9 }}
+                className="text-[1rem] font-semibold underline cursor-pointer text-(--brand)"
               >
-                Unfollow
-              </button>
-            ) : (
-              <button
-                className="bg-(--brand) px-4 py-1 rounded-md text-background border border-(--brand) hover:bg-transparent active:bg-transparent hover:text-(--brand) active:text-(--brand) transition-all duration-200"
-                onClick={(e) => {
-                  e.stopPropagation();
-                  axios
-                    .post(
-                      `/api/user/follow/${post.author.id}`,
-                      {},
-                      {
-                        headers: {
-                          Authorization: `Bearer ${getCookie("token")}`,
-                        },
-                      }
-                    )
-                    .then((res) => {
-                      setFollowing(true);
-                      alert(`Followed ${post.author.username} successfully`);
-                      setUser(res.data);
-                    })
-                    .catch((err) => {
-                      alert("Error following user");
-                      setFollowing(false);
-                    });
-                }}
-              >
-                Follow
-              </button>
+                {post.author.username}
+              </motion.h1>
+              {following ? (
+                <button
+                  className="bg-(--brand) px-4 py-1 rounded-md text-background border border-(--brand) hover:bg-transparent active:bg-transparent hover:text-(--brand) active:text-(--brand) transition-all duration-200"
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    axios
+                      .post(
+                        `/api/user/unfollow/${post.author.id}`,
+                        {},
+                        {
+                          headers: {
+                            Authorization: `Bearer ${getCookie("token")}`,
+                          },
+                        }
+                      )
+                      .then((res) => {
+                        setFollowing(false);
+                        alert(
+                          `Unfollowed ${post.author.username} successfully`
+                        );
+                        setUser(res.data);
+                      })
+                      .catch((err) => {
+                        setFollowing(false);
+                        alert("Error unfollowing user");
+                      });
+                  }}
+                >
+                  Unfollow
+                </button>
+              ) : (
+                <button
+                  className="bg-(--brand) px-4 py-1 rounded-md text-background border border-(--brand) hover:bg-transparent active:bg-transparent hover:text-(--brand) active:text-(--brand) transition-all duration-200"
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    axios
+                      .post(
+                        `/api/user/follow/${post.author.id}`,
+                        {},
+                        {
+                          headers: {
+                            Authorization: `Bearer ${getCookie("token")}`,
+                          },
+                        }
+                      )
+                      .then((res) => {
+                        setFollowing(true);
+                        alert(`Followed ${post.author.username} successfully`);
+                        setUser(res.data);
+                      })
+                      .catch((err) => {
+                        alert("Error following user");
+                        setFollowing(false);
+                      });
+                  }}
+                >
+                  Follow
+                </button>
+              )}
+            </div>
+            {post.title && (
+              <h1 className="font-semibold text-[2rem]">{post.title}</h1>
             )}
+            <p className="text-[1.1rem] text-(--secondary-text)">
+              {post.content}
+            </p>
+            <div className="flex gap-4 overflow-x-auto snap-x snap-mandatory mt-4 w-1/4 max-[700px]:w-full">
+              {post.imagesUrl.map((url) => (
+                <img
+                  src={url as string}
+                  alt="Post Image"
+                  key={url as string}
+                  className="snap-center w-[60rem]  object-cover"
+                />
+              ))}
+            </div>
+            <div className="flex gap-4 items-center">
+              <h1>{likes as number}</h1>
+              {liked ? (
+                <button
+                  className="bg-(--brand) px-4 py-1 rounded-md text-background border border-(--brand) hover:bg-transparent active:bg-transparent hover:text-(--brand) active:text-(--brand) transition-all duration-200"
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    setLiked(false);
+                    setLikes((prev) => prev - 1);
+                    axios
+                      .post(
+                        `/api/posts/dislike/${post.id}`,
+                        {},
+                        {
+                          headers: {
+                            Authorization: `Bearer ${getCookie("token")}`,
+                          },
+                        }
+                      )
+                      .then(() => {
+                        alert("Post disliked");
+                      })
+                      .catch((err) => {
+                        alert("Error disliking post");
+                        setLiked(false);
+                        setLikes((prev) => prev + 1);
+                      });
+                  }}
+                >
+                  Dislike
+                </button>
+              ) : (
+                <button
+                  className="bg-(--brand) px-4 py-1 rounded-md text-background border border-(--brand) hover:bg-transparent active:bg-transparent hover:text-(--brand) active:text-(--brand) transition-all duration-200"
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    setLiked(true);
+                    setLikes((prev) => prev + 1);
+                    axios
+                      .post(
+                        `/api/posts/like/${post.id}`,
+                        {},
+                        {
+                          headers: {
+                            Authorization: `Bearer ${getCookie("token")}`,
+                          },
+                        }
+                      )
+                      .then(() => {
+                        alert("Post liked");
+                      })
+                      .catch((err) => {
+                        alert("Error liking post");
+                        setLiked(false);
+                        setLikes((prev) => prev - 1);
+                      });
+                  }}
+                >
+                  Like
+                </button>
+              )}
+            </div>
+            <h1 className="text-(--secondary-text)">
+              {moment(post.createdAt).fromNow()}
+            </h1>
           </div>
-          {post.title && (
-            <h1 className="font-semibold text-[2rem]">{post.title}</h1>
-          )}
-          <p className="text-[1.1rem] text-(--secondary-text)">
-            {post.content}
-          </p>
-          <div className="flex gap-4 overflow-x-auto snap-x snap-mandatory mt-4 w-1/4 max-[700px]:w-full">
-            {post.imagesUrl.map((url) => (
-              <img
-                src={url as string}
-                alt="Post Image"
-                key={url as string}
-                className="snap-center w-[60rem]  object-cover"
-              />
-            ))}
-          </div>
-          <div className="flex gap-4 items-center">
-            <h1>{likes as number}</h1>
-            {liked ? (
-              <button
-                className="bg-(--brand) px-4 py-1 rounded-md text-background border border-(--brand) hover:bg-transparent active:bg-transparent hover:text-(--brand) active:text-(--brand) transition-all duration-200"
-                onClick={(e) => {
-                  e.stopPropagation();
-                  setLiked(false);
-                  setLikes((prev) => prev - 1);
-                  axios
-                    .post(
-                      `/api/posts/dislike/${post.id}`,
-                      {},
-                      {
-                        headers: {
-                          Authorization: `Bearer ${getCookie("token")}`,
-                        },
-                      }
-                    )
-                    .then(() => {
-                      alert("Post disliked");
-                    })
-                    .catch((err) => {
-                      alert("Error disliking post");
-                      setLiked(false);
-                      setLikes((prev) => prev + 1);
-                    });
-                }}
-              >
-                Dislike
-              </button>
-            ) : (
-              <button
-                className="bg-(--brand) px-4 py-1 rounded-md text-background border border-(--brand) hover:bg-transparent active:bg-transparent hover:text-(--brand) active:text-(--brand) transition-all duration-200"
-                onClick={(e) => {
-                  e.stopPropagation();
-                  setLiked(true);
-                  setLikes((prev) => prev + 1);
-                  axios
-                    .post(
-                      `/api/posts/like/${post.id}`,
-                      {},
-                      {
-                        headers: {
-                          Authorization: `Bearer ${getCookie("token")}`,
-                        },
-                      }
-                    )
-                    .then(() => {
-                      alert("Post liked");
-                    })
-                    .catch((err) => {
-                      alert("Error liking post");
-                      setLiked(false);
-                      setLikes((prev) => prev - 1);
-                    });
-                }}
-              >
-                Like
-              </button>
-            )}
-          </div>
-          <h1 className="text-(--secondary-text)">
-            {moment(post.createdAt).fromNow()}
-          </h1>
-        </div>
+        )
       )}
-      {error && <Error>{error}</Error>}
+      {error && (
+        <Error className="text-center text-[1.5rem] pt-[20vh]">{error}</Error>
+      )}
     </>
   );
 }
