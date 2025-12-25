@@ -112,7 +112,7 @@ export default function User({ params }: { params: Promise<{ id: string }> }) {
               className="w-3/4 max-[500px]:w-screen px-4 flex flex-col gap-2 items-start mt-20"
             >
               {posts.map((post) => (
-                <Post post={post} key={post.id as string} />
+                <Post setPosts={setPosts} post={post} key={post.id as string} />
               ))}
             </InfiniteScroll>
             {errorP && (

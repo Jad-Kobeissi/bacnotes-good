@@ -7,7 +7,13 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 import { getCookie } from "cookies-next";
 
-export default function Post({ post }: { post: TPost }) {
+export default function Post({
+  post,
+  setPosts,
+}: {
+  post: TPost;
+  setPosts?: React.Dispatch<React.SetStateAction<TPost[]>>;
+}) {
   const router = useRouter();
   const { user, setUser } = useUser();
   const [following, setFollowing] = useState<boolean | null>(null);
@@ -183,6 +189,31 @@ export default function Post({ post }: { post: TPost }) {
           </button>
         )}
       </div>
+      {post.authorId == user?.id ? (
+        <button
+          className="bg-(--brand) px-4 py-1 rounded-md text-background border border-(--brand) hover:bg-transparent active:bg-transparent hover:text-(--brand) active:text-(--brand) transition-all duration-200"
+          onClick={(e) => {
+            e.stopPropagation();
+            axios
+              .delete(`/api/posts/${post.id}`, {
+                headers: {
+                  Authorization: `Bearer ${getCookie("token")}`,
+                },
+              })
+              .then((res) => {
+                alert("Post deleted successfully");
+                setPosts &&
+                  setPosts((posts) => posts.filter((p) => p.id !== post.id));
+              })
+              .catch((err) => {
+                console.log(err);
+                alert("Error deleting post");
+              });
+          }}
+        >
+          Delete
+        </button>
+      ) : null}
       <h1 className="text-(--secondary-text)">
         {moment(post.createdAt).fromNow()}
       </h1>

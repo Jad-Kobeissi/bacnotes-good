@@ -88,7 +88,7 @@ export default function Profile() {
             className="flex justify-center flex-col overflow-hidden my-[20vh] py-5 px-10 gap-4"
           >
             {posts.map((post) => (
-              <Post key={post.id as string} post={post} />
+              <Post key={post.id as string} post={post} setPosts={setPosts} />
             ))}
           </InfiniteScroll>
           {error && <Error className="text-center my-[10vh]">{error}</Error>}
