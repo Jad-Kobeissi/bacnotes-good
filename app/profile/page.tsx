@@ -7,7 +7,7 @@ import Loading from "../Loading";
 import Nav from "../Nav";
 import { TPost } from "../types";
 import axios from "axios";
-import { getCookie } from "cookies-next";
+import { deleteCookie, getCookie } from "cookies-next";
 import Post from "../Post";
 import Error from "../Error";
 import { useRouter } from "next/navigation";
@@ -56,7 +56,35 @@ export default function Profile() {
       ) : (
         <>
           <div className="flex flex-col items-center justify-center pt-[30vh]">
-            <h1 className="text-[1.2rem] font-semibold">{user.username}</h1>
+            <div className="flex gap-2 items-center justify-center">
+              <h1 className="text-[1.2rem] font-semibold">{user.username}</h1>
+              <button
+                className="bg-(--brand) px-4 py-1 rounded-md text-background border
+                      border-(--brand) hover:bg-transparent active:bg-transparent
+                      hover:text-(--brand) active:text-(--brand) transition-all
+                      duration-200"
+                onClick={() => {
+                  axios
+                    .delete(`/api/user/${user.id}`, {
+                      headers: {
+                        Authorization: `Bearer ${getCookie("token")}`,
+                      },
+                    })
+                    .then((res) => {
+                      alert("User deleted successfully");
+                      deleteCookie("token");
+                      sessionStorage.clear();
+                      router.push("/");
+                    })
+                    .catch((err) => {
+                      console.log(err);
+                      alert("Error deleting user");
+                    });
+                }}
+              >
+                Delete
+              </button>
+            </div>
             <div className="flex text-gray-600 gap-4 font-medium">
               <motion.h1
                 onClick={() => router.push(`/user/followers/${user.id}`)}
