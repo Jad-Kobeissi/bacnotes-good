@@ -9,6 +9,7 @@ import { getCookie } from "cookies-next";
 import React, { useEffect, useState } from "react";
 import { motion } from "motion/react";
 import { useUser } from "@/app/contexts/UserContext";
+import { useRouter } from "next/navigation";
 
 export default function PostPage({
   params,
@@ -23,6 +24,7 @@ export default function PostPage({
   const [liked, setLiked] = useState<boolean | null>(null);
   const [likes, setLikes] = useState<number>(post?.likes as number);
   const { user, setUser } = useUser();
+  const router = useRouter();
   const fetchPosts = () => {
     setError("");
     setLoading(true);
@@ -220,6 +222,30 @@ export default function PostPage({
             <h1 className="text-(--secondary-text)">
               {moment(post.createdAt).fromNow()}
             </h1>
+            {post.authorId == user?.id ? (
+              <button
+                className="bg-(--brand) px-4 py-1 rounded-md text-background border border-(--brand) hover:bg-transparent active:bg-transparent hover:text-(--brand) active:text-(--brand) transition-all duration-200"
+                onClick={(e) => {
+                  e.stopPropagation();
+                  axios
+                    .delete(`/api/posts/${post.id}`, {
+                      headers: {
+                        Authorization: `Bearer ${getCookie("token")}`,
+                      },
+                    })
+                    .then((res) => {
+                      alert("Post deleted successfully");
+                      router.push(`/profile`);
+                    })
+                    .catch((err) => {
+                      console.log(err);
+                      alert("Error deleting post");
+                    });
+                }}
+              >
+                Delete
+              </button>
+            ) : null}
           </div>
         )
       )}
