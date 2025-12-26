@@ -12,6 +12,6 @@ export const algoliaAdmin = algoliasearch(
 algoliaAdmin.setSettings({
   indexName: process.env.POSTS_INDEX_NAME!,
   indexSettings: {
-    attributesForFaceting: ["filterOnly(id)"],
+    attributesForFaceting: ["filterOnly(id)", "filterOnly(authorId)"],
   },
 });

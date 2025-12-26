@@ -5,11 +5,13 @@ import {
   SearchBox,
   Hits,
   Pagination,
+  Configure,
 } from "react-instantsearch-dom";
 import { algoliasearch } from "algoliasearch";
 import Post from "../Post";
 import { TPost } from "../types";
 import Nav from "../Nav";
+import { useUser } from "../contexts/UserContext";
 
 const searchClient = algoliasearch(
   process.env.NEXT_PUBLIC_ALGOLIA_APP_ID!,
@@ -17,11 +19,14 @@ const searchClient = algoliasearch(
 );
 
 export default function Search() {
+  const { user } = useUser();
   return (
     <>
       <Nav />
       <div className="pt-20">
         <InstantSearch searchClient={searchClient} indexName="posts">
+          {user && <Configure filters={`NOT authorId:${user.id}`} />}
+
           <div className="flex flex-col items-center justify-center mb-4">
             <SearchBox
               inputId="search"
