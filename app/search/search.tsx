@@ -23,7 +23,7 @@ export default function Search() {
   return (
     <>
       <Nav />
-      <div className="pt-20">
+      <div className="pt-20 flex items-center justify-center flex-col gap-4 pt-[10vh]">
         <InstantSearch searchClient={searchClient} indexName="posts">
           {user && <Configure filters={`NOT authorId:${user.id}`} />}
 
@@ -33,7 +33,7 @@ export default function Search() {
               className="shadow-md py-1 px-4 rounded-md outline-none"
             />
           </div>
-          <div className="w-3/4 flex flex-col items-center justify-center mx-8">
+          <div className="w-screen flex flex-col items-center justify-center mx-8">
             <Hits hitComponent={PostHit} />
           </div>
         </InstantSearch>
