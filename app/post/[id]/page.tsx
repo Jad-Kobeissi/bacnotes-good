@@ -98,9 +98,6 @@ export default function PostPage({
                       )
                       .then((res) => {
                         setFollowing(false);
-                        alert(
-                          `Unfollowed ${post.author.username} successfully`
-                        );
                         setUser(res.data);
                       })
                       .catch((err) => {
@@ -128,7 +125,6 @@ export default function PostPage({
                       )
                       .then((res) => {
                         setFollowing(true);
-                        alert(`Followed ${post.author.username} successfully`);
                         setUser(res.data);
                       })
                       .catch((err) => {
@@ -176,8 +172,7 @@ export default function PostPage({
                           },
                         }
                       )
-                      .then(() => {
-                      })
+                      .then(() => {})
                       .catch((err) => {
                         alert("Error disliking post");
                         setLiked(false);
@@ -204,8 +199,7 @@ export default function PostPage({
                           },
                         }
                       )
-                      .then(() => {
-                      })
+                      .then(() => {})
                       .catch((err) => {
                         alert("Error liking post");
                         setLiked(false);

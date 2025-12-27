@@ -1,18 +1,16 @@
 "use client";
-import { useState } from "react";
 import {
   InstantSearch,
   SearchBox,
   Hits,
-  Pagination,
   Configure,
 } from "react-instantsearch-dom";
 import { algoliasearch } from "algoliasearch";
-import Post from "../Post";
 import { TPost } from "../types";
 import Nav from "../Nav";
 import { useUser } from "../contexts/UserContext";
-
+import { useRouter } from "next/navigation";
+import { motion } from "motion/react";
 const searchClient = algoliasearch(
   process.env.NEXT_PUBLIC_ALGOLIA_APP_ID!,
   process.env.NEXT_PUBLIC_ALGOLIA_SEARCH_KEY!
@@ -55,6 +53,43 @@ export function PostHit({ hit }: { hit: any }) {
     likes: hit.likes || 0,
     updatedAt: hit.updatedAt,
   };
-
-  return <Post post={post} />;
+  const router = useRouter();
+  return (
+    <div
+      onClick={() => router.push(`/post/${post.id}`)}
+      key={post.id as string}
+      className="border border-gray-300 flex flex-col gap-2 items-start justify-center rounded-lg p-20 px-25 w-full"
+    >
+      <div className="flex gap-4 items-center">
+        <motion.h1
+          whileHover={{ scale: 1.05 }}
+          whileTap={{ scale: 0.9 }}
+          onClick={(e) => {
+            e.stopPropagation();
+            router.push(`/user/${post.author.id}`);
+          }}
+          className="text-[1rem] underline cursor-pointer text-(--brand) font-semibold"
+        >
+          {post.author.username}
+        </motion.h1>
+      </div>
+      {post.title && (
+        <h2 className="font-semibold text-[1.5rem]">{post.title}</h2>
+      )}
+      <p className="font-medium text-(--secondary-text) w-full">
+        {post.content}
+      </p>
+      <div className="w-full flex justify-center">
+        <div className="flex max-[600px]:w-[120%] max-[400px]:w-[200%] w-1/2 overflow-x-auto snap-x snap-mandatory gap-4 items-center">
+          {post.imagesUrl.map((image, key) => (
+            <img
+              src={image as string}
+              key={key}
+              className="snap-center rounded-md"
+            />
+          ))}
+        </div>
+      </div>
+    </div>
+  );
 }
