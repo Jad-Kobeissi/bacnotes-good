@@ -177,7 +177,6 @@ export default function PostPage({
                         }
                       )
                       .then(() => {
-                        alert("Post disliked");
                       })
                       .catch((err) => {
                         alert("Error disliking post");
@@ -206,7 +205,6 @@ export default function PostPage({
                         }
                       )
                       .then(() => {
-                        alert("Post liked");
                       })
                       .catch((err) => {
                         alert("Error liking post");
