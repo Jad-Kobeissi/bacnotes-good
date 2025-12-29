@@ -81,7 +81,7 @@ export default function PostPage({
               >
                 {post.author.username}
               </motion.h1>
-              {following ? (
+              {post.authorId == user?.id ? null : following ? (
                 <button
                   className="bg-(--brand) px-4 py-1 rounded-md text-background border border-(--brand) hover:bg-transparent active:bg-transparent hover:text-(--brand) active:text-(--brand) transition-all duration-200"
                   onClick={(e) => {
