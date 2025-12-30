@@ -31,7 +31,7 @@ export default function Search() {
               className="shadow-md py-1 px-4 rounded-md outline-none"
             />
           </div>
-          <div className="w-screen flex flex-col items-center justify-center mx-8">
+          <div className="w-screen flex flex-col items-center justify-center mx-8 gap-2">
             <Hits hitComponent={PostHit} />
           </div>
         </InstantSearch>
@@ -48,6 +48,7 @@ export function PostHit({ hit }: { hit: any }) {
     authorId: hit.authorId,
     createdAt: hit.createdAt,
     author: hit.author,
+    subject: hit.subject,
     imagesUrl: hit.imagesUrl || [],
     likedUsers: hit.likedUsers || [],
     likes: hit.likes || 0,
@@ -58,7 +59,7 @@ export function PostHit({ hit }: { hit: any }) {
     <div
       onClick={() => router.push(`/post/${post.id}`)}
       key={post.id as string}
-      className="border border-gray-300 flex flex-col gap-2 items-start justify-center rounded-lg p-20 px-25 w-full"
+      className="border border-gray-300 flex flex-col gap-2 items-start justify-center rounded-lg p-20 px-25 w-3/4 mx-4"
     >
       <div className="flex gap-4 items-center">
         <motion.h1
