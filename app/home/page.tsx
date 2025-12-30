@@ -135,9 +135,10 @@ export default function Home() {
               </select>
             </div>
             <div className="flex justify-between w-full">
-              <div>
-                <label htmlFor="file">
+              <div className="text-(--brand)">
+                <label htmlFor="file" className="flex gap-2 p-1 rounded-md">
                 <img src="/customSvgs/image.svg" className="w-[1.6rem]" />
+                <h1>Photo</h1>
               </label>
               <input
                 multiple
