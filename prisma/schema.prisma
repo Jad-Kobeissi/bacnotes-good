@@ -31,10 +31,12 @@ model User {
   email       String   @unique
   password    String
   posts       Post[]
+  requests Request[]
   followers   User[]   @relation("followers")
   following   User[]   @relation("followers")
   viewedPosts Post[]   @relation("viewedUsers")
   likedPosts  Post[]   @relation("likedUsers")
+  likedReplies Reply[]
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
 }
@@ -57,7 +59,21 @@ model Request {
   id String @id @default(uuid())
   title String 
   content String
+  author User @relation(references: [id], fields: [authorId])
+  authorId String
   subject Subject
+  replies Reply[] @relation("replies")
   createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+model Reply {
+  id String @id @default(ulid())
+  request Request @relation("replies", fields: [requestId], references: [id])
+  requestId String
+  content String
+  likes Int @default(0)
+  likedUsers User[]
+  imageUrls String[]
+  createdAt DateTime 
   updatedAt DateTime @updatedAt
 }

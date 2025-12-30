@@ -2,39 +2,39 @@
 import { motion } from "motion/react";
 import InfiniteScroll from "react-infinite-scroll-component";
 import { useEffect, useState } from "react";
-import { useUser } from "../contexts/UserContext";
-import Loading from "../Loading";
-import Nav from "../Nav";
-import { TPost } from "../types";
+import { useUser } from "../../contexts/UserContext";
+import Loading from "../../Loading";
+import Nav from "../../Nav";
+import { TPost, TRequest } from "../../types";
 import axios from "axios";
 import { deleteCookie, getCookie } from "cookies-next";
-import Post from "../Post";
-import Error from "../Error";
+import Error from "../../Error";
 import { useRouter } from "next/navigation";
+import Request from "@/app/Request";
 
 export default function Profile() {
   const { user } = useUser();
   const [error, setError] = useState("");
-  const [posts, setPosts] = useState<TPost[]>([]);
+  const [requests, setRequests] = useState<TRequest[]>([]);
   const [hasMore, setHasMore] = useState(true);
   const [page, setPage] = useState(1);
   const router = useRouter();
-  const fetchPosts = () => {
+  const fetchRequests = () => {
     axios
-      .get(`/api/posts/user/${user?.id}?page=${page}`, {
+      .get(`/api/request/user/${user?.id}?page=${page}`, {
         headers: {
           Authorization: `Bearer ${getCookie("token")}`,
         },
       })
       .then((res) => {
         console.log(res.data);
-        setPosts((prev) => {
-          const newPosts = [...prev, ...res.data];
-          const filteredPosts: any[] = Array.from(
-            new Map(newPosts.map((p) => [p.id, p]) as any).values()
+        setRequests((prev) => {
+          const newRequests = [...prev, ...res.data];
+          const filteredReqests: any[] = Array.from(
+            new Map(newRequests.map((p) => [p.id, p]) as any).values()
           );
 
-          return filteredPosts;
+          return filteredReqests;
         });
         setPage((prev) => prev + 1);
       })
@@ -46,7 +46,7 @@ export default function Profile() {
   };
   useEffect(() => {
     if (!user) return;
-    fetchPosts();
+    fetchRequests();
   }, [user]);
   return (
     <>
@@ -122,7 +122,7 @@ export default function Profile() {
           </div>
           <div className="flex gap-8 justify-center mt-10">
             <button
-              className=""
+              className="text-(--secondary-text)"
               onClick={() => {
                 router.push("/profile");
               }}
@@ -130,7 +130,6 @@ export default function Profile() {
               Posts
             </button>
             <button
-              className="text-(--secondary-text)"
               onClick={() => {
                 router.push("/profile/requests");
               }}
@@ -145,12 +144,16 @@ export default function Profile() {
                 <Loading className="flex items-center justify-center mt-[20vh] w-fit" />
               </div>
             }
-            next={fetchPosts}
-            dataLength={posts.length}
+            next={fetchRequests}
+            dataLength={requests.length}
             className="flex justify-center flex-col overflow-hidden my-[10vh] py-5 px-10 gap-4"
           >
-            {posts.map((post) => (
-              <Post key={post.id as string} post={post} setPosts={setPosts} />
+            {requests.map((request) => (
+              <Request
+                key={request.id as string}
+                request={request}
+                setRequests={setRequests}
+              />
             ))}
           </InfiniteScroll>
           {error && <Error className="text-center my-[10vh]">{error}</Error>}

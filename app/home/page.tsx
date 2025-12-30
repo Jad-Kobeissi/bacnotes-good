@@ -75,6 +75,14 @@ export default function Home() {
     <>
       <Nav />
       <div className="pt-[10vh]">
+        <div className="flex gap-8 justify-center mb-10">
+          <button className="" onClick={() => {
+            router.push("/home")
+          }}>Posts</button>
+          <button className="text-(--secondary-text)" onClick={() => {
+            router.push("/requests")
+          }}>Requests</button>
+        </div>
         <div className="w-3/4 min-[600px]:mx-8 flex flex-col gap-4 max-[600px]:w-screen">
           <form
             className="border border-gray-300 rounded-lg w-full py-4 px-4 flex justify-between items-center flex-col gap-2"
