@@ -1,6 +1,7 @@
 import { decode, verify } from "jsonwebtoken";
 import { prisma } from "../../init";
 import { TJWT } from "@/app/types";
+import { Subject } from "@/app/generated/prisma/enums";
 
 export async function GET(
   req: Request,
@@ -61,6 +62,51 @@ export async function DELETE(
     });
 
     return new Response("Request deleted");
+  } catch (error: any) {
+    return new Response(error, { status: 500 });
+  }
+}
+export async function PUT(
+  req: Request,
+  { params }: { params: Promise<{ id: string }> }
+) {
+  try {
+    const authHeader = req.headers.get("Authorization")?.split(" ")[1];
+
+    if (!authHeader || !verify(authHeader, process.env.JWT_SECRET!))
+      return new Response("Unauthorized", { status: 401 });
+
+    const decoded = decode(authHeader) as TJWT;
+
+    const { id } = await params;
+
+    const request = await prisma.request.findUnique({
+      where: {
+        id,
+      },
+    });
+
+    if (!request) return new Response("Request not found", { status: 404 });
+
+    if (request.authorId !== decoded.id)
+      return new Response("Unauthorized", { status: 401 });
+
+    const { title, content } = await req.json();
+    await prisma.request.update({
+      where: { id },
+      data: {
+        title:
+          title && title !== "" && title !== request.title
+            ? title
+            : request.title,
+        content:
+          content && content !== "" && content !== request.content
+            ? content
+            : request.content,
+      },
+    });
+
+    return new Response("Post updated");
   } catch (error: any) {
     return new Response(error, { status: 500 });
   }
