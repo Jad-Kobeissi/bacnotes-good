@@ -1,7 +1,7 @@
 import { decode, verify } from "jsonwebtoken";
 import { prisma } from "../../init";
 import { TJWT } from "@/app/types";
-import { Subject } from "@/app/generated/prisma/enums";
+import { algoliaAdmin } from "@/lib/algolia";
 
 export async function GET(
   req: Request,
@@ -55,6 +55,10 @@ export async function DELETE(
     if (decoded.id !== request.authorId)
       return new Response("Unauthorized", { status: 401 });
 
+    await algoliaAdmin.deleteObject({
+      indexName: process.env.REQUESTS_INDEX_NAME as string,
+      objectID: id,
+    });
     await prisma.request.delete({
       where: {
         id,
@@ -92,6 +96,7 @@ export async function PUT(
       return new Response("Unauthorized", { status: 401 });
 
     const { title, content } = await req.json();
+
     await prisma.request.update({
       where: { id },
       data: {

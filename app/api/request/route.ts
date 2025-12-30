@@ -2,6 +2,7 @@ import { decode, verify } from "jsonwebtoken";
 import { prisma } from "../init";
 import { isEmpty } from "../isEmpty";
 import { TJWT } from "@/app/types";
+import { algoliaAdmin } from "@/lib/algolia";
 
 export async function GET(req: Request) {
   try {
@@ -49,6 +50,18 @@ export async function POST(req: Request) {
         content,
         subject,
         authorId: decoded.id,
+      },
+      include: {
+        author: true,
+        replies: true,
+      },
+    });
+
+    algoliaAdmin.saveObject({
+      indexName: process.env.REQUESTS_INDEX_NAME as string,
+      body: {
+        objectID: request.id,
+        ...request,
       },
     });
 

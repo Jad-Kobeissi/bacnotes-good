@@ -26,6 +26,10 @@ export default function Request({
         <h1>Username: {request.author.username}</h1>
         <h1>{request.title}</h1>
         <p className="text-(--secondary-text)">{request.content}</p>
+        <div className="flex gap-2 items-center text-(--brand) p-2 border-(--brand) rounded-lg">
+          <img src="/customSvgs/book.svg" alt="Book" className="w-6" />
+          <p className="text-[1rem]">{request.subject.toLocaleLowerCase()}</p>
+        </div>
       </div>
       {user && user.id == request.authorId && (
         <button
@@ -47,10 +51,6 @@ export default function Request({
                   setRequests((prev) =>
                     prev.filter((r) => r.id !== request.id)
                   );
-                setUser({
-                  ...user,
-                  requests: user.requests.filter((r) => r.id !== request.id),
-                });
               })
               .catch((err) => {
                 console.log(err);
