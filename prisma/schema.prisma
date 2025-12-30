@@ -12,6 +12,18 @@ generator client {
 datasource db {
   provider = "postgresql"
 }
+enum Subject {
+  ENGLISH
+  ARABIC
+  MATH
+  FRENCH
+  BIOLOGY
+  PHYSICS
+  CHEMISTRY
+  GEOGRAPHY
+  CIVICS
+  HISTORY
+}
 
 model User {
   id          String   @id @default(uuid())
@@ -33,10 +45,19 @@ model Post {
   content     String
   author      User     @relation(fields: [authorId], references: [id], onDelete: Cascade)
   authorId    String
+  subject Subject
   imagesUrl   String[]
   likes Int     @default(0)
   likedUsers User[]   @relation("likedUsers")
   viewedUsers User[]   @relation("viewedUsers")
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
+}
+model Request {
+  id String @id @default(uuid())
+  title String 
+  content String
+  subject Subject
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }

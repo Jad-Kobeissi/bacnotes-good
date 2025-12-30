@@ -1,12 +1,5 @@
 "use client";
 
-import { algoliasearch } from "algoliasearch";
-
-const searchClient = algoliasearch(
-  process.env.NEXT_PUBLIC_ALGOLIA_APP_ID!,
-  process.env.NEXT_PUBLIC_ALGOLIA_SEARCH_KEY!
-);
-
 import { useEffect, useRef, useState } from "react";
 import { TPost } from "../types";
 import axios from "axios";
@@ -27,6 +20,7 @@ export default function Home() {
   const files = useRef<HTMLInputElement>(null);
   const textarearef = useRef<HTMLTextAreaElement>(null);
   const title = useRef<HTMLInputElement>(null);
+  const [subject, setSubject] = useState("")
   const router = useRouter();
   const fetchPosts = () => {
     axios
@@ -83,12 +77,13 @@ export default function Home() {
       <div className="pt-[10vh]">
         <div className="w-3/4 min-[600px]:mx-8 flex flex-col gap-4 max-[600px]:w-screen">
           <form
-            className="border border-gray-300 rounded-lg w-full py-4 px-4 flex justify-between items-center"
+            className="border border-gray-300 rounded-lg w-full py-4 px-4 flex justify-between items-center flex-col gap-2"
             onSubmit={(e) => {
               e.preventDefault();
               const formData = new FormData();
               formData.append("title", title.current?.value as string);
               formData.append("content", textarearef.current?.value as string);
+              formData.append("subject", subject)
               Array.from(files.current?.files || []).map((file) => {
                 formData.append("files", file);
               });
@@ -103,6 +98,7 @@ export default function Home() {
                   if (title.current) title.current.value = "";
                   if (textarearef.current) textarearef.current.value = "";
                   if (files.current) files.current.value = "";
+                  setSubject("")
                 });
             }}
           >
@@ -120,7 +116,27 @@ export default function Home() {
                 className="flex items-center placeholder:items-center h-auto w-full"
                 rows={2}
               />
-              <label htmlFor="file">
+              <select name="subject" id="subject" 
+                className="flex items-center placeholder:items-center h-auto w-full"
+               value={subject} onChange={(e) => {
+                setSubject(e.target.value)
+              }}>
+                <option value="">Select a Subject</option>
+                <option value="ENGLISH">English</option>
+                <option value="ARABIC">Arabic</option>
+                <option value="MATH">Math</option>
+                <option value="FRENCH">French</option>
+                <option value="PHYSICS">Physics</option>
+                <option value="CHEMISTRY">Chemistry</option>
+                <option value="BIOLOGY">Biology</option>
+                <option value="GEOGRAPHY">Geography</option>
+                <option value="CIVICS">Civics</option>
+                <option value="HISOTRY">History</option>
+              </select>
+            </div>
+            <div className="flex justify-between w-full">
+              <div>
+                <label htmlFor="file">
                 <img src="/customSvgs/image.svg" className="w-[1.6rem]" />
               </label>
               <input
@@ -130,10 +146,11 @@ export default function Home() {
                 type="file"
                 className="hidden"
               />
-            </div>
+              </div>
             <button className="bg-(--brand) text-background px-4 py-1 rounded-md border border-(--brand) hover:bg-transparent active:bg-transparent hover:text-(--brand) active:text-(--brand) transition-all duration-200 ">
               Post
             </button>
+            </div>
           </form>
           <button
             onClick={() => router.push("/search")}

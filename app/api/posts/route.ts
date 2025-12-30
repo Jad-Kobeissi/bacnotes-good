@@ -4,6 +4,7 @@ import { TJWT } from "@/app/types";
 import { isEmpty } from "../isEmpty";
 import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
 import { algoliaAdmin } from "@/lib/algolia";
+import { Subject } from "@/app/generated/prisma/enums";
 
 export async function GET(req: Request) {
   try {
@@ -77,6 +78,7 @@ export async function POST(req: Request) {
     const formData = await req.formData();
     const title = formData.get("title") as string;
     const content = formData.get("content") as string;
+    const subject = formData.get("subject") as string
     const files = formData.getAll("files") as File[];
 
     if (!content || isEmpty([content]))
@@ -87,6 +89,7 @@ export async function POST(req: Request) {
         title,
         content,
         authorId: decoded.id,
+        subject: subject as Subject,
       },
     });
 

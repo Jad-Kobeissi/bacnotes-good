@@ -14,6 +14,7 @@ export interface TPost {
   id: String;
   title: String;
   content: String;
+  subject: String
   createdAt: Date;
   updatedAt: Date;
   likes: Number;

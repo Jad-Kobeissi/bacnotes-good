@@ -114,6 +114,12 @@ export default function Post({
       <p className="font-medium text-(--secondary-text) w-full">
         {post.content}
       </p>
+      <div className="flex gap-2 items-center text-(--brand) p-2 border-(--brand) rounded-lg">
+        <img src="/customSvgs/book.svg" alt="Book" className="w-6" />
+        <p className="text-[1rem]">
+        {post.subject.toLocaleLowerCase()}
+        </p>
+      </div>
       <div className="w-full flex justify-center">
         <div className="flex max-[600px]:w-[120%] max-[400px]:w-[200%] w-1/2 overflow-x-auto snap-x snap-mandatory gap-4 items-center">
           {post.imagesUrl.map((image, key) => (
