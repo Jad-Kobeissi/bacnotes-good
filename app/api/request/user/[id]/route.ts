@@ -33,6 +33,7 @@ export async function GET(
       },
       include: {
         author: true,
+        replies: true,
       },
       take: 5,
       skip,

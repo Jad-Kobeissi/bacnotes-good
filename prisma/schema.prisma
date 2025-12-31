@@ -32,11 +32,12 @@ model User {
   password    String
   posts       Post[]
   requests Request[]
+  replies Reply[]
   followers   User[]   @relation("followers")
   following   User[]   @relation("followers")
   viewedPosts Post[]   @relation("viewedUsers")
   likedPosts  Post[]   @relation("likedUsers")
-  likedReplies Reply[]
+  likedReplies Reply[] @relation("likesReply")
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
 }
@@ -67,13 +68,15 @@ model Request {
   updatedAt DateTime @updatedAt
 }
 model Reply {
-  id String @id @default(ulid())
+  id String @id @default(uuid())
   request Request @relation("replies", fields: [requestId], references: [id])
   requestId String
   content String
   likes Int @default(0)
-  likedUsers User[]
+  likedUsers User[] @relation("likesReply")
+  authorId String
+  author User @relation(fields: [authorId], references: [id])
   imageUrls String[]
-  createdAt DateTime 
+  createdAt DateTime @default(now()) 
   updatedAt DateTime @updatedAt
 }

@@ -32,6 +32,20 @@ export interface TRequest {
   author: TUser;
   authorId: String;
   subject: Subject;
+  replies: TReply[];
+  createdAt: Date;
+  updatedAt: Date;
+}
+export interface TReply {
+  id: String;
+  request: Request;
+  requestId: String;
+  content: String;
+  likes: Number;
+  likedUsers: TUser[];
+  authorId: String;
+  author: TUser;
+  imageUrls: String[];
   createdAt: Date;
   updatedAt: Date;
 }

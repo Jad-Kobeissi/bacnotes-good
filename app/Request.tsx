@@ -61,6 +61,9 @@ export default function Request({
           Delete
         </button>
       )}
+      <h1 className="text-(--secondary-text)">
+        {request.replies.length} replies
+      </h1>
       <h1 className="text-(--secondary-text) mt-3">
         {moment(request.createdAt).fromNow()}
       </h1>

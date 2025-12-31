@@ -21,6 +21,7 @@ export async function GET(
       },
       include: {
         author: true,
+        replies: true,
       },
     });
 

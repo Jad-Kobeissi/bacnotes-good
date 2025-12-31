@@ -20,6 +20,7 @@ export async function GET(req: Request) {
       },
       include: {
         author: true,
+        replies: true,
       },
     });
 

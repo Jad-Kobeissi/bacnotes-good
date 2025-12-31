@@ -227,7 +227,7 @@ export default function Post({
                   setPosts((posts) => posts.filter((p) => p.id !== post.id));
                 setUser({
                   ...user,
-                  requests: user.posts.filter((p) => p.id !== post.id),
+                  requests: user.requests.filter((p) => p.id !== post.id),
                 });
               })
               .catch((err) => {
