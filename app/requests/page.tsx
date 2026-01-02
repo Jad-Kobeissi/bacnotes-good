@@ -153,7 +153,7 @@ export default function Requests() {
             Go To Search
           </button>
         </div>
-        <div className="flex w-3/4 items-center justify-center">
+        <div className="flex w-3/4 max-[600px]:w-full items-center justify-center">
           <select
             name="subject"
             id="subject"
