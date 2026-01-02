@@ -10,8 +10,14 @@ export const algoliaAdmin = algoliasearch(
   process.env.ALGOLIA_ADMIN_KEY!
 );
 algoliaAdmin.setSettings({
-  indexName: process.env.POSTS_INDEX_NAME!,
+  indexName: process.env.NEXT_PUBLIC_POSTS_INDEX_NAME!,
   indexSettings: {
     attributesForFaceting: ["filterOnly(id)", "filterOnly(authorId)"],
+  },
+});
+algoliaAdmin.setSettings({
+  indexName: process.env.NEXT_PUBLIC_REQUESTS_INDEX_NAME!,
+  indexSettings: {
+    attributesForFaceting: ["filterOnly(id)", "filterOnly(requesterId)"],
   },
 });

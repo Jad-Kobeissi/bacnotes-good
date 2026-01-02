@@ -59,7 +59,7 @@ export async function POST(req: Request) {
     });
 
     algoliaAdmin.saveObject({
-      indexName: process.env.REQUESTS_INDEX_NAME as string,
+      indexName: process.env.NEXT_PUBLIC_REQUESTS_INDEX_NAME as string,
       body: {
         objectID: request.id,
         ...request,

@@ -67,7 +67,7 @@ export async function DELETE(
     });
 
     await algoliaAdmin.deleteBy({
-      indexName: process.env.POSTS_INDEX_NAME!,
+      indexName: process.env.NEXT_PUBLIC_POSTS_INDEX_NAME!,
       deleteByParams: {
         filters: `id:"${post.id}"`,
       },

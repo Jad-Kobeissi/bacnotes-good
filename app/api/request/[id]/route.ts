@@ -57,7 +57,7 @@ export async function DELETE(
       return new Response("Unauthorized", { status: 401 });
 
     await algoliaAdmin.deleteObject({
-      indexName: process.env.REQUESTS_INDEX_NAME as string,
+      indexName: process.env.NEXT_PUBLIC_REQUESTS_INDEX_NAME as string,
       objectID: id,
     });
     await prisma.request.delete({

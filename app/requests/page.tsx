@@ -138,6 +138,20 @@ export default function Requests() {
               Post
             </button>
           </form>
+          <button
+            onClick={() => router.push("/search/requests")}
+            className="bg-(--brand) text-background rounded-md mx-4 px-4 py-1 border border-(--brand) hover:bg-transparent active:bg-transparent hover:text-(--brand) active:text-(--brand) transition-all duration-200 flex items-center justify-center font-semibold gap-2 group"
+          >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              viewBox="0 0 640 640"
+              fill="currentColor"
+              className="w-5 fill-white group-hover:fill-(--brand)"
+            >
+              <path d="M480 272C480 317.9 465.1 360.3 440 394.7L566.6 521.4C579.1 533.9 579.1 554.2 566.6 566.7C554.1 579.2 533.8 579.2 521.3 566.7L394.7 440C360.3 465.1 317.9 480 272 480C157.1 480 64 386.9 64 272C64 157.1 157.1 64 272 64C386.9 64 480 157.1 480 272zM272 416C351.5 416 416 351.5 416 272C416 192.5 351.5 128 272 128C192.5 128 128 192.5 128 272C128 351.5 192.5 416 272 416z" />
+            </svg>
+            Go To Search
+          </button>
         </div>
         <div className="flex w-3/4 items-center justify-center">
           <select

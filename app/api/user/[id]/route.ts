@@ -59,7 +59,7 @@ export async function DELETE(
         console.log("done");
 
         return algoliaAdmin.deleteBy({
-          indexName: process.env.POSTS_INDEX_NAME!,
+          indexName: process.env.NEXT_PUBLIC_POSTS_INDEX_NAME!,
           deleteByParams: {
             filters: `id:"${post.id}"`,
           },

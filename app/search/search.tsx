@@ -22,7 +22,10 @@ export default function Search() {
     <>
       <Nav />
       <div className="pt-20 flex items-center justify-center flex-col gap-4 pt-[10vh]">
-        <InstantSearch searchClient={searchClient} indexName="posts">
+        <InstantSearch
+          searchClient={searchClient}
+          indexName={process.env.NEXT_PUBLIC_POSTS_INDEX_NAME!}
+        >
           {user && <Configure filters={`NOT authorId:${user.id}`} />}
 
           <div className="flex flex-col items-center justify-center mb-4">

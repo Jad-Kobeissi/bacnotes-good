@@ -78,14 +78,27 @@ export async function POST(req: Request) {
     const formData = await req.formData();
     const title = formData.get("title") as string;
     const content = formData.get("content") as string;
-    const subject = formData.get("subject") as Subject
+    const subject = formData.get("subject") as Subject;
     const files = formData.getAll("files") as File[];
 
     if (!content || isEmpty([content]))
       return new Response("Please Fill All Fields", { status: 400 });
 
-    if (subject !== "ARABIC" && subject !== "ENGLISH" && subject !== "BIOLOGY" && subject !== "CHEMISTRY" && subject !== "CIVICS" && subject !== "FRENCH" && subject !== "GEOGRAPHY" && subject !== "HISTORY" && subject !== "MATH" && subject !== "PHYSICS") {
-      return new Response("Please pick one of the subjects presented", { status: 400 })
+    if (
+      subject !== "ARABIC" &&
+      subject !== "ENGLISH" &&
+      subject !== "BIOLOGY" &&
+      subject !== "CHEMISTRY" &&
+      subject !== "CIVICS" &&
+      subject !== "FRENCH" &&
+      subject !== "GEOGRAPHY" &&
+      subject !== "HISTORY" &&
+      subject !== "MATH" &&
+      subject !== "PHYSICS"
+    ) {
+      return new Response("Please pick one of the subjects presented", {
+        status: 400,
+      });
     }
     const post = await prisma.post.create({
       data: {
@@ -123,7 +136,7 @@ export async function POST(req: Request) {
 
     algoliaAdmin
       .saveObject({
-        indexName: process.env.POSTS_INDEX_NAME!,
+        indexName: process.env.NEXT_PUBLIC_POSTS_INDEX_NAME!,
         body: {
           objectID: newPost.id,
           ...newPost,
