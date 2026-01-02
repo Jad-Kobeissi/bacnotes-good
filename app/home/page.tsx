@@ -189,7 +189,7 @@ export default function Home() {
             </svg>
             Go To Search
           </button>
-          <div className="flex w-3/4 items-center justify-center">
+          <div className="flex w-full items-center justify-center ">
             <select
               name="subject"
               id="subject"
