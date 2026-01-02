@@ -3,6 +3,7 @@ import { prisma } from "../init";
 import { isEmpty } from "../isEmpty";
 import { sign } from "jsonwebtoken";
 import axios from "axios";
+import { algoliaAdmin } from "@/lib/algolia";
 
 export async function POST(req: Request) {
   try {
@@ -40,6 +41,13 @@ export async function POST(req: Request) {
       },
     });
 
+    await algoliaAdmin.saveObject({
+      indexName: process.env.NEXT_PUBLIC_USERS_INDEX_NAME!,
+      body: {
+        objectID: user.id,
+        ...user,
+      },
+    });
     const token = await sign(
       { username, id: user.id },
       process.env.JWT_SECRET as string

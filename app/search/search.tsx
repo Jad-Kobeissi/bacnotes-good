@@ -18,6 +18,7 @@ const searchClient = algoliasearch(
 
 export default function Search() {
   const { user } = useUser();
+  const router = useRouter();
   return (
     <>
       <Nav />
@@ -33,6 +34,21 @@ export default function Search() {
               inputId="search"
               className="shadow-md py-1 px-4 rounded-md outline-none"
             />
+          </div>
+          <div className="flex gap-6">
+            <button onClick={() => router.push(`/search`)}>Posts</button>
+            <button
+              onClick={() => router.push(`/search/requests`)}
+              className="text-(--secondary-text)"
+            >
+              Requests
+            </button>
+            <button
+              onClick={() => router.push(`/search/user`)}
+              className="text-(--secondary-text)"
+            >
+              Users
+            </button>
           </div>
           <div className="w-screen flex flex-col items-center justify-center mx-8 gap-2">
             <Hits hitComponent={PostHit} />

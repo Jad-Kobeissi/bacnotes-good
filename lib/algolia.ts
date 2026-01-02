@@ -18,6 +18,12 @@ algoliaAdmin.setSettings({
 algoliaAdmin.setSettings({
   indexName: process.env.NEXT_PUBLIC_REQUESTS_INDEX_NAME!,
   indexSettings: {
-    attributesForFaceting: ["filterOnly(id)", "filterOnly(requesterId)"],
+    attributesForFaceting: ["filterOnly(id)", "filterOnly(authorId)"],
+  },
+});
+algoliaAdmin.setSettings({
+  indexName: process.env.NEXT_PUBLIC_USERS_INDEX_NAME!,
+  indexSettings: {
+    attributesForFaceting: ["filterOnly(id)"],
   },
 });
