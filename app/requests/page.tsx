@@ -139,6 +139,28 @@ export default function Requests() {
             </button>
           </form>
         </div>
+        <div className="flex w-3/4 items-center justify-center">
+          <select
+            name="subject"
+            id="subject"
+            className="border border-(--brand) px-4 py-1 rounded-md text-(--brand)"
+            onChange={(e) => {
+              router.push(`/requests/subject/${e.target.value}`);
+            }}
+          >
+            <option value="">Filter by Subject</option>
+            <option value="ENGLISH">English</option>
+            <option value="ARABIC">Arabic</option>
+            <option value="MATH">Math</option>
+            <option value="FRENCH">French</option>
+            <option value="PHYSICS">Physics</option>
+            <option value="CHEMISTRY">Chemistry</option>
+            <option value="BIOLOGY">Biology</option>
+            <option value="GEOGRAPHY">Geography</option>
+            <option value="CIVICS">Civics</option>
+            <option value="HISOTRY">History</option>
+          </select>
+        </div>
         <InfiniteScroll
           dataLength={requests.length}
           loader={
