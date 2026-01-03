@@ -71,6 +71,7 @@ export function PostHit({ hit }: { hit: any }) {
     imagesUrl: hit.imagesUrl || [],
     likedUsers: hit.likedUsers || [],
     likes: hit.likes || 0,
+    reports: hit.reports || [],
     updatedAt: hit.updatedAt,
   };
   const router = useRouter();
