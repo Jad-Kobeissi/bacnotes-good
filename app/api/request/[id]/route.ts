@@ -53,7 +53,7 @@ export async function DELETE(
 
     if (!request) return new Response("Request not found", { status: 404 });
 
-    if (decoded.id !== request.authorId)
+    if (decoded.id !== request.authorId && !decoded.admin)
       return new Response("Unauthorized", { status: 401 });
 
     await algoliaAdmin.deleteObject({

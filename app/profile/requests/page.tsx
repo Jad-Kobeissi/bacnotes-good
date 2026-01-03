@@ -151,7 +151,7 @@ export default function Profile() {
             }
             next={fetchRequests}
             dataLength={requests.length}
-            className="flex justify-center flex-col overflow-hidden my-[10vh] py-5 px-10 gap-4"
+            className="flex justify-center flex-col overflow-hidden my-[10vh] py-5 min-[422px]:px-10 gap-4"
           >
             {requests.map((request) => (
               <Request
