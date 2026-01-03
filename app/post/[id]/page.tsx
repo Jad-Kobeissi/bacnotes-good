@@ -74,13 +74,18 @@ export default function PostPage({
         post && (
           <div className="pt-[20vh] flex items-center justify-center flex-col gap-2">
             <div className="flex items-center gap-4">
-              <motion.h1
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.9 }}
-                className="text-[1rem] font-semibold underline cursor-pointer text-(--brand)"
-              >
-                {post.author.username}
-              </motion.h1>
+              <div className="flex gap-2">
+                <motion.h1
+                  whileHover={{ scale: 1.05 }}
+                  whileTap={{ scale: 0.9 }}
+                  className="text-[1rem] font-semibold underline cursor-pointer text-(--brand)"
+                >
+                  {post.author.username}
+                </motion.h1>
+                {post.author.admin && (
+                  <h1 className="text-(--secondary-text)">admin</h1>
+                )}
+              </div>
               {post.authorId == user?.id ? null : following ? (
                 <button
                   className="bg-(--brand) px-4 py-1 rounded-md text-background border border-(--brand) hover:bg-transparent active:bg-transparent hover:text-(--brand) active:text-(--brand) transition-all duration-200"

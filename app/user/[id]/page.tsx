@@ -79,7 +79,14 @@ export default function User({ params }: { params: Promise<{ id: string }> }) {
         {!error ? (
           <>
             <div className="pt-25 flex flex-col items-center justify-center gap-2">
-              <h1 className="text-[1.5rem] font-semibold">{fUser?.username}</h1>
+              <div className="flex gap-2">
+                <h1 className="text-[1.5rem] font-semibold">
+                  {fUser?.username}
+                </h1>
+                {fUser?.admin && (
+                  <h1 className="text-(--secondary-text)">admin</h1>
+                )}
+              </div>
               <div className="flex gap-2 text-(--secondary-text)">
                 <motion.h1
                   whileHover={{ scale: 1.05 }}

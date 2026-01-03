@@ -220,7 +220,7 @@ export default function Home() {
             loader={
               <Loading className="flex items-center justify-center mt-[10vh]" />
             }
-            className="flex justify-center flex-col overflow-hidden my-[20vh] py-5 px-10 gap-4 "
+            className="flex justify-center flex-col overflow-hidden my-[20vh] py-5 min-[422px]:px-10 gap-4 "
           >
             {posts.map((post) => (
               <Post key={post.id as string} post={post} setPosts={setPosts} />
@@ -228,7 +228,6 @@ export default function Home() {
           </InfiniteScroll>
         </div>
       </div>
-
       {error && <Error className="text-[1.5rem] text-center">{error}</Error>}
     </>
   );

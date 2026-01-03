@@ -23,7 +23,12 @@ export default function Request({
       }}
     >
       <div>
-        <h1>Username: {request.author.username}</h1>
+        <div className="flex gap-2">
+          <h1>Username: {request.author.username}</h1>
+          {request.author.admin && (
+            <h1 className="text-(--secondary-text)">admin</h1>
+          )}
+        </div>
         <h1>{request.title}</h1>
         <p className="text-(--secondary-text)">{request.content}</p>
         <div className="flex gap-2 items-center text-(--brand) p-2 border-(--brand) rounded-lg">

@@ -93,6 +93,9 @@ export function RequestHit({ hit }: { hit: any }) {
         >
           {request.author.username}
         </motion.h1>
+        {request.author.admin && (
+          <h1 className="text-(--secondary-text)">admin</h1>
+        )}
       </div>
       {request.title && (
         <h2 className="font-semibold text-[1.5rem]">{request.title}</h2>

@@ -58,7 +58,12 @@ export default function Followers({
                 key={user.id as string}
                 onClick={() => router.push(`/user/${user.id}`)}
               >
-                <h1>{user.username}</h1>
+                <div className="flex gap-2">
+                  <h1>{user.username}</h1>
+                  {user.admin && (
+                    <h1 className="text-(--secondary-text)">admin</h1>
+                  )}
+                </div>
               </div>
             ))}
           </div>

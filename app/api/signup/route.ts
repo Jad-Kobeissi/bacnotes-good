@@ -49,7 +49,7 @@ export async function POST(req: Request) {
       },
     });
     const token = await sign(
-      { username, id: user.id },
+      { username, id: user.id, admin: user.admin, email: user.email },
       process.env.JWT_SECRET as string
     );
 

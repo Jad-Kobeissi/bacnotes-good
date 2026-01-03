@@ -58,7 +58,7 @@ export async function DELETE(
       },
     });
     if (!post) return new Response("Post not found", { status: 404 });
-    if (post.authorId !== decoded.id)
+    if (post.authorId !== decoded.id && decoded.admin !== true)
       return new Response("Unauthorized", { status: 401 });
     await prisma.post.delete({
       where: {

@@ -81,17 +81,22 @@ export function PostHit({ hit }: { hit: any }) {
       className="border border-gray-300 flex flex-col gap-2 items-start justify-center rounded-lg p-20 px-25 w-3/4 mx-4"
     >
       <div className="flex gap-4 items-center">
-        <motion.h1
-          whileHover={{ scale: 1.05 }}
-          whileTap={{ scale: 0.9 }}
-          onClick={(e) => {
-            e.stopPropagation();
-            router.push(`/user/${post.author.id}`);
-          }}
-          className="text-[1rem] underline cursor-pointer text-(--brand) font-semibold"
-        >
-          {post.author.username}
-        </motion.h1>
+        <div className="flex gap-2">
+          <motion.h1
+            whileHover={{ scale: 1.05 }}
+            whileTap={{ scale: 0.9 }}
+            onClick={(e) => {
+              e.stopPropagation();
+              router.push(`/user/${post.author.id}`);
+            }}
+            className="text-[1rem] underline cursor-pointer text-(--brand) font-semibold"
+          >
+            {post.author.username}
+          </motion.h1>
+          {post.author.admin && (
+            <h1 className="text-(--secondary-text)">admin</h1>
+          )}
+        </div>
       </div>
       {post.title && (
         <h2 className="font-semibold text-[1.5rem]">{post.title}</h2>

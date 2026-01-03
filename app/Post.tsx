@@ -38,28 +38,89 @@ export default function Post({
     <div
       onClick={() => router.push(`/post/${post.id}`)}
       key={post.id as string}
-      className="border border-gray-300 flex flex-col gap-2 items-start justify-center rounded-lg p-20 max-[380px]:p-5 w-full"
+      className="border border-gray-300 flex flex-col gap-2 items-start justify-center rounded-lg p-20 max-[380px]:p-5 max-[422px]:w-screen "
     >
-      <div className="flex gap-4 items-center">
-        <motion.h1
-          whileHover={{ scale: 1.05 }}
-          whileTap={{ scale: 0.9 }}
-          onClick={(e) => {
-            e.stopPropagation();
-            router.push(`/user/${post.author.id}`);
-          }}
-          className="text-[1rem] underline cursor-pointer text-(--brand) font-semibold"
-        >
-          {post.author.username}
-        </motion.h1>
-        {user && user.id === post.authorId ? null : following ? (
-          <button
-            className="bg-(--brand) px-4 py-1 rounded-md text-background border border-(--brand) hover:bg-transparent active:bg-transparent hover:text-(--brand) active:text-(--brand) transition-all duration-200"
+      <div className="flex gap-4 items-center justify-between w-full">
+        <div className="flex gap-4 items-center">
+          <div className="flex gap-2">
+            <motion.h1
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.9 }}
+              onClick={(e) => {
+                e.stopPropagation();
+                router.push(`/user/${post.author.id}`);
+              }}
+              className="text-[1rem] underline cursor-pointer text-(--brand) font-semibold"
+            >
+              {post.author.username}
+            </motion.h1>
+            {post.author.admin && (
+              <h1 className="text-(--secondary-text)">admin</h1>
+            )}
+          </div>
+          {user && user.id === post.authorId ? null : following ? (
+            <button
+              className="bg-(--brand) px-4 py-1 rounded-md text-background border border-(--brand) hover:bg-transparent active:bg-transparent hover:text-(--brand) active:text-(--brand) transition-all duration-200"
+              onClick={(e) => {
+                e.stopPropagation();
+                axios
+                  .post(
+                    `/api/user/unfollow/${post.author.id}`,
+                    {},
+                    {
+                      headers: {
+                        Authorization: `Bearer ${getCookie("token")}`,
+                      },
+                    }
+                  )
+                  .then((res) => {
+                    setFollowing(false);
+                    setUser(res.data);
+                  })
+                  .catch((err) => {
+                    setFollowing(false);
+                    alert("Error unfollowing user");
+                  });
+              }}
+            >
+              Unfollow
+            </button>
+          ) : (
+            <button
+              className="bg-(--brand) px-4 py-1 rounded-md text-background border border-(--brand) hover:bg-transparent active:bg-transparent hover:text-(--brand) active:text-(--brand) transition-all duration-200"
+              onClick={(e) => {
+                e.stopPropagation();
+                axios
+                  .post(
+                    `/api/user/follow/${post.author.id}`,
+                    {},
+                    {
+                      headers: {
+                        Authorization: `Bearer ${getCookie("token")}`,
+                      },
+                    }
+                  )
+                  .then((res) => {
+                    setFollowing(true);
+                    setUser(res.data);
+                  })
+                  .catch((err) => {
+                    alert("Error following user");
+                    setFollowing(false);
+                  });
+              }}
+            >
+              Follow
+            </button>
+          )}
+        </div>
+        {post.authorId != user?.id && (
+          <div
             onClick={(e) => {
               e.stopPropagation();
               axios
                 .post(
-                  `/api/user/unfollow/${post.author.id}`,
+                  `/api/posts/reports/${post.id}`,
                   {},
                   {
                     headers: {
@@ -68,44 +129,36 @@ export default function Post({
                   }
                 )
                 .then((res) => {
-                  setFollowing(false);
-                  setUser(res.data);
-                })
-                .catch((err) => {
-                  setFollowing(false);
-                  alert("Error unfollowing user");
-                });
-            }}
-          >
-            Unfollow
-          </button>
-        ) : (
-          <button
-            className="bg-(--brand) px-4 py-1 rounded-md text-background border border-(--brand) hover:bg-transparent active:bg-transparent hover:text-(--brand) active:text-(--brand) transition-all duration-200"
-            onClick={(e) => {
-              e.stopPropagation();
-              axios
-                .post(
-                  `/api/user/follow/${post.author.id}`,
-                  {},
-                  {
-                    headers: {
-                      Authorization: `Bearer ${getCookie("token")}`,
-                    },
+                  alert("Post reported successfully");
+
+                  if (setPosts && user?.id !== post.authorId) {
+                    setPosts((prev) => {
+                      const newPosts = prev
+                        ? prev.filter((p) => p.id !== post.id)
+                        : prev;
+                      sessionStorage.setItem("posts", JSON.stringify(newPosts));
+                      return newPosts;
+                    });
                   }
-                )
-                .then((res) => {
-                  setFollowing(true);
-                  setUser(res.data);
                 })
                 .catch((err) => {
-                  alert("Error following user");
-                  setFollowing(false);
+                  if (err.response.status === 409) {
+                    alert(err.response.data);
+                  } else {
+                    alert("Error reporting post");
+                  }
                 });
             }}
           >
-            Follow
-          </button>
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              viewBox="0 0 640 640"
+              fill="#eb4034"
+              className="w-10"
+            >
+              <path d="M144 88C144 74.7 133.3 64 120 64C106.7 64 96 74.7 96 88L96 552C96 565.3 106.7 576 120 576C133.3 576 144 565.3 144 552L144 452L224.3 431.9C265.4 421.6 308.9 426.4 346.8 445.3C391 467.4 442.3 470.1 488.5 452.7L523.2 439.7C535.7 435 544 423.1 544 409.7L544 130C544 107 519.8 92 499.2 102.3L489.6 107.1C443.3 130.3 388.8 130.3 342.5 107.1C307.4 89.5 267.1 85.1 229 94.6L144 116L144 88zM144 165.5L240.6 141.3C267.6 134.6 296.1 137.7 321 150.1C375.9 177.5 439.7 179.8 496 156.9L496 398.7L471.6 407.8C437.9 420.4 400.4 418.5 368.2 402.4C320 378.3 264.9 372.3 212.6 385.3L144 402.5L144 165.5z" />
+            </svg>
+          </div>
         )}
       </div>
       {post.title && (
@@ -210,7 +263,7 @@ export default function Post({
           )}
         </div>
       </div>
-      {post.authorId == user?.id ? (
+      {post.authorId == user?.id || user?.admin ? (
         <button
           className="bg-(--brand) px-4 py-1 rounded-md text-background border border-(--brand) hover:bg-transparent active:bg-transparent hover:text-(--brand) active:text-(--brand) transition-all duration-200"
           onClick={(e) => {

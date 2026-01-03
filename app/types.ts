@@ -5,12 +5,20 @@ export interface TUser {
   username: String;
   email: String;
   password: String;
+  admin: Boolean;
   posts: TPost[];
   requests: TRequest[];
+  replies: TReply[];
   followers: TUser[];
   following: TUser[];
   viewedPosts: TPost[];
+  likedPosts: TPost[];
+  likedReplies: TReply[];
+  PostReports: TPostReport[];
+  RequestReports: TRequestReport[];
+  ReplyReports: TReplyReport[];
   createdAt: Date;
+  updatedAt: Date;
 }
 export interface TPost {
   id: String;
@@ -21,6 +29,7 @@ export interface TPost {
   updatedAt: Date;
   likes: Number;
   likedUsers: TUser[];
+  reports: TPostReport[];
   author: TUser;
   authorId: String;
   imagesUrl: String[];
@@ -53,4 +62,30 @@ export interface TJWT {
   id: string;
   username: string;
   email: string;
+  admin: Boolean;
+}
+
+export interface TPostReport {
+  id: String;
+  post: TPost;
+  postId: String;
+  reporter: TUser;
+  reporterId: String;
+  createdAt: Date;
+}
+export interface TRequestReport {
+  id: String;
+  request: TRequest;
+  requestId: String;
+  reporter: TUser;
+  reporterId: String;
+  createdAt: Date;
+}
+export interface TReplyReport {
+  id: String;
+  reply: TReply;
+  replyId: String;
+  reporter: TUser;
+  reporterId: String;
+  createdAt: Date;
 }

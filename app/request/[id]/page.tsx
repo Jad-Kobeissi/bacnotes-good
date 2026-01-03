@@ -83,7 +83,12 @@ export default function Request({
           {request && (
             <div className="flex flex-col items-center justify-center pt-[30vh] text-center">
               <div>
-                <h1>Username: {request.author.username}</h1>
+                <div className="flex gap-2">
+                  <h1>Username: {request.author.username}</h1>
+                  {request.author.admin && (
+                    <h1 className="text-(--secondary-text)">admin</h1>
+                  )}
+                </div>
                 <h1>{request.title}</h1>
                 <p className="text-(--secondary-text)">{request.content}</p>
               </div>

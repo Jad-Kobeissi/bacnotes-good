@@ -30,6 +30,7 @@ model User {
   username    String   @unique
   email       String   @unique
   password    String
+  admin Boolean @default(false)
   posts       Post[]
   requests Request[]
   replies Reply[]
@@ -38,6 +39,9 @@ model User {
   viewedPosts Post[]   @relation("viewedUsers")
   likedPosts  Post[]   @relation("likedUsers")
   likedReplies Reply[] @relation("likesReply")
+  PostReports PostReport[]
+  RequestReports RequestReport[]
+  ReplyReports ReplyReport[]
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
 }
@@ -53,6 +57,7 @@ model Post {
   likes Int     @default(0)
   likedUsers User[]   @relation("likedUsers")
   viewedUsers User[]   @relation("viewedUsers")
+  reports PostReport[]
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
 }
@@ -64,6 +69,7 @@ model Request {
   authorId String
   subject Subject
   replies Reply[] @relation("replies")
+  reports RequestReport[]
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 }
@@ -76,7 +82,33 @@ model Reply {
   likedUsers User[] @relation("likesReply")
   authorId String
   author User @relation(fields: [authorId], references: [id])
+  reports ReplyReport[]
   imageUrls String[]
   createdAt DateTime @default(now()) 
   updatedAt DateTime @updatedAt
+}
+
+model PostReport {
+  id String @id @default(uuid())
+  post Post @relation(fields: [postId], references: [id], onDelete: Cascade)
+  postId String
+  reporter User @relation(fields: [reporterId], references: [id])
+  reporterId String
+  createdAt DateTime @default(now())
+}
+model RequestReport {
+  id String @id @default(uuid())
+  request Request @relation(fields: [requestId], references: [id], onDelete: Cascade)
+  requestId String
+  reporter User @relation(fields: [reporterId], references: [id])
+  reporterId String
+  createdAt DateTime @default(now())
+}
+model ReplyReport {
+  id String @id @default(uuid())
+  reply Reply @relation(fields: [replyId], references: [id], onDelete: Cascade)
+  replyId String
+  reporter User @relation(fields: [reporterId], references: [id])
+  reporterId String
+  createdAt DateTime @default(now())
 }

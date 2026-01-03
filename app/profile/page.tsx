@@ -57,7 +57,13 @@ export default function Profile() {
         <>
           <div className="flex flex-col items-center justify-center pt-[30vh]">
             <div className="flex gap-2 items-center justify-center">
-              <h1 className="text-[1.2rem] font-semibold">{user.username}</h1>
+              <div className="flex items-center gap-2">
+                <h1 className="text-[1.2rem] font-semibold">{user.username}</h1>
+                {user.admin && (
+                  <h1 className="text-(--secondary-text)">admin</h1>
+                )}
+              </div>
+              {console.log(user) as any}
               <button
                 className="bg-(--brand) px-4 py-1 rounded-md text-background border
                       border-(--brand) hover:bg-transparent active:bg-transparent
@@ -147,7 +153,7 @@ export default function Profile() {
             }
             next={fetchPosts}
             dataLength={posts.length}
-            className="flex justify-center flex-col overflow-hidden my-[10vh] py-5 px-10 gap-4"
+            className="flex justify-center flex-col overflow-hidden my-[10vh] py-5 min-[422px]:px-10 gap-4"
           >
             {posts.map((post) => (
               <Post key={post.id as string} post={post} setPosts={setPosts} />

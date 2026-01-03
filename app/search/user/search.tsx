@@ -64,12 +64,20 @@ export function UserHit({ hit }: { hit: any }) {
     id: hit.objectID,
     username: hit.username,
     email: hit.email,
+    admin: hit.admin || false,
     createdAt: hit.createdAt,
     followers: hit.followers || [],
     following: hit.following || [],
     password: hit.password,
     posts: hit.posts || [],
     requests: hit.requests || [],
+    replies: hit.replies || [],
+    likedPosts: hit.likedPosts || [],
+    likedReplies: hit.likedReplies || [],
+    PostReports: hit.PostReports || [],
+    ReplyReports: hit.ReplyReports || [],
+    RequestReports: hit.RequestReports || [],
+    updatedAt: hit.updatedAt,
     viewedPosts: hit.viewedPosts || [],
   };
   const router = useRouter();
@@ -80,7 +88,10 @@ export function UserHit({ hit }: { hit: any }) {
       whileHover={{ scale: 1.1 }}
       whileTap={{ scale: 0.95 }}
     >
-      <h1>{user.username}</h1>
+      <div className="flex gap-2">
+        <h1>{user.username}</h1>
+        {user.admin && <h1 className="text-(--secondary-text)">admin</h1>}
+      </div>
       <div className="flex gap-2 text-(--secondary-text) items-center">
         <h1>Followers: {user.followers.length}</h1>
         <h1>Following: {user.following.length}</h1>

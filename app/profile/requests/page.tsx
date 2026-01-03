@@ -57,7 +57,12 @@ export default function Profile() {
         <>
           <div className="flex flex-col items-center justify-center pt-[30vh]">
             <div className="flex gap-2 items-center justify-center">
-              <h1 className="text-[1.2rem] font-semibold">{user.username}</h1>
+              <div className="flex gap-2">
+                <h1 className="text-[1.2rem] font-semibold">{user.username}</h1>
+                {user.admin && (
+                  <h1 className="text-(--secondary-text)">admin</h1>
+                )}
+              </div>
               <button
                 className="bg-(--brand) px-4 py-1 rounded-md text-background border
                       border-(--brand) hover:bg-transparent active:bg-transparent
