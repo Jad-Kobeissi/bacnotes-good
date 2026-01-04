@@ -5,6 +5,7 @@ export interface TUser {
   username: String;
   email: String;
   password: String;
+  grade: Number;
   admin: Boolean;
   posts: TPost[];
   requests: TRequest[];
@@ -63,6 +64,7 @@ export interface TJWT {
   username: string;
   email: string;
   admin: Boolean;
+  grade: Number
 }
 
 export interface TPostReport {

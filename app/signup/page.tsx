@@ -15,6 +15,7 @@ export default function SignUp() {
   const [password, setPassword] = useState("");
   const [confirmPass, setConfirmPass] = useState("");
   const [email, setEmail] = useState("");
+  const [grade, setGrade] = useState(6)
   const regex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
   const { setUser } = useUser();
   const router = useRouter();
@@ -46,6 +47,7 @@ export default function SignUp() {
                 username,
                 email,
                 password,
+                grade
               })
               .then((res) => {
                 setUser(res.data.user);
@@ -123,6 +125,21 @@ export default function SignUp() {
                 className="shadow-md px-4 py-1 text-[1.2rem] rounded-md outline-none"
                 value={confirmPass}
                 onChange={(e) => setConfirmPass(e.target.value)}
+              />
+            </div>
+            <div className="flex flex-col">
+              <label htmlFor="grade" className="text-[1.2rem] font-bold">
+                Grade
+              </label>
+              <input
+                type="number"
+                placeholder="Re-enter your password"
+                id="grade"
+                className="shadow-md px-4 py-1 text-[1.2rem] rounded-md outline-none"
+                value={grade}
+                max={12}
+                min={1}
+                onChange={(e) => setGrade(parseInt(e.target.value))}
               />
             </div>
             <button className="w-full bg-(--brand) py-1 text-background rounded-lg font-medium">

@@ -24,6 +24,9 @@ export async function GET(req: Request) {
         authorId: {
           not: decoded.id as string,
         },
+        author: {
+          grade: decoded.grade as number
+        }
       },
       include: {
         author: {

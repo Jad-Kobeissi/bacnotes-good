@@ -30,7 +30,7 @@ export async function POST(req: Request) {
       return new Response("Incorrect Password", { status: 400 });
 
     const token = await sign(
-      { id: user.id, username: user.username, email, admin: user.admin },
+      { id: user.id, username: user.username, email, admin: user.admin, grade: user.grade },
       process.env.JWT_SECRET as string
     );
 

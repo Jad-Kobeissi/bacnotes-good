@@ -30,6 +30,7 @@ model User {
   username    String   @unique
   email       String   @unique
   password    String
+  grade Int
   admin Boolean @default(false)
   posts       Post[]
   requests Request[]

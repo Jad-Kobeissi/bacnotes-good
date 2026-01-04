@@ -7,16 +7,18 @@ import { algoliaAdmin } from "@/lib/algolia";
 
 export async function POST(req: Request) {
   try {
-    const { username, email, password } = await req.json();
+    const { username, email, password, grade } = await req.json();
 
     if (
       !username ||
       !password ||
       !email ||
+      !grade ||
       isEmpty([username, email, password])
     )
       return new Response("Please Fill All Fields", { status: 400 });
 
+  
     const userCheck = await prisma.user.findFirst({
       where: { OR: [{ email }, { username }] },
     });
@@ -29,6 +31,7 @@ export async function POST(req: Request) {
         username,
         email,
         password: hashedPassword,
+        grade
       },
       include: {
         posts: true,
@@ -49,7 +52,7 @@ export async function POST(req: Request) {
       },
     });
     const token = await sign(
-      { username, id: user.id, admin: user.admin, email: user.email },
+      { username, id: user.id, admin: user.admin, email: user.email, grade: user.grade },
       process.env.JWT_SECRET as string
     );
 
