@@ -59,10 +59,6 @@ export default function PostReportsPage() {
             <div
               key={report.id as string}
               className="border border-gray-300 p-4 mb-4 rounded-md mx-4"
-              onClick={(e) => {
-                e.stopPropagation();
-                router.push(`/admin/postReports/${report.id}`);
-              }}
             >
               <p className="mb-1">Reported by: {report.reporter.username}</p>
               <p>Post Id: {report.post.id}</p>

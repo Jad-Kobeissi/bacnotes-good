@@ -129,7 +129,7 @@ export async function DELETE(
 
     const decoded = decode(authHeader) as TJWT;
 
-    if (reply.authorId !== decoded.id)
+    if (reply.authorId !== decoded.id && !decoded.admin)
       return new Response("Unauthorized", { status: 401 });
 
     await prisma.reply.delete({

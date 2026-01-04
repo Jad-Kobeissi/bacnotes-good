@@ -2,7 +2,7 @@
 import Error from "@/app/Error";
 import Loading from "@/app/Loading";
 import Nav from "@/app/Nav";
-import { TRequestReport } from "@/app/types";
+import { TReplyReport, TRequestReport } from "@/app/types";
 import axios from "axios";
 import { getCookie } from "cookies-next";
 import { useRouter } from "next/navigation";
@@ -11,7 +11,7 @@ import { useEffect, useState } from "react";
 import InfiniteScroll from "react-infinite-scroll-component";
 
 export default function PostReportsPage() {
-  const [reports, setReports] = useState<TRequestReport[]>([]);
+  const [reports, setReports] = useState<TReplyReport[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
   const [page, setPage] = useState(1);
@@ -19,7 +19,7 @@ export default function PostReportsPage() {
   const router = useRouter();
   const fetchReports = async () => {
     axios
-      .get(`/api/request/reports?page=${page}`, {
+      .get(`/api/reply/reports?page=${page}`, {
         headers: {
           Authorization: `Bearer ${getCookie("token")}`,
         },
@@ -59,42 +59,45 @@ export default function PostReportsPage() {
             <div
               key={report.id as string}
               className="border border-gray-300 p-4 mb-4 rounded-md mx-4"
+              onClick={(e) => {
+                e.stopPropagation();
+                router.push(`/admin/replyReports/${report.id}`);
+              }}
             >
               <p className="mb-1">Reported by: {report.reporter.username}</p>
-              <p>Request Id: {report.request.id}</p>
-              <p>Request Title: {report.request.title}</p>
-              <p>Request Content: {report.request.content}</p>
+              <p>Reply Id: {report.reply.id}</p>
+              <p>Reply Content: {report.reply.content}</p>
               <div className="flex gap-4 w-full">
                 <button
                   className="bg-(--brand) text-background py-1 px-2 rounded-md"
                   onClick={(e) => {
                     e.stopPropagation();
                     axios
-                      .delete(`/api/request/${report?.requestId}`, {
+                      .delete(`/api/reply/${report?.replyId}`, {
                         headers: {
                           Authorization: `Bearer ${getCookie("token")}`,
                         },
                       })
                       .then((res) => {
-                        alert("Request deleted successfully");
+                        alert("Reply deleted successfully");
                         setReports((prev) =>
                           prev.filter((r) => r.id !== report.id)
                         );
                       })
                       .catch((err) => {
                         console.log(err);
-                        alert("Error deleting Request");
+                        alert("Error deleting Reply");
                       });
                   }}
                 >
-                  Delete Request
+                  Delete Reply
                 </button>
                 <button
                   className="bg-(--brand) text-background py-1 px-2 rounded-md"
                   onClick={(e) => {
                     e.stopPropagation();
                     axios
-                      .delete(`/api/request/report/${report.id}`, {
+                      .delete(`/api/reply/report/${report.id}`, {
                         headers: {
                           Authorization: `Bearer ${getCookie("token")}`,
                         },
