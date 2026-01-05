@@ -63,7 +63,6 @@ export default function Profile() {
                   <h1 className="text-(--secondary-text)">admin</h1>
                 )}
               </div>
-              {console.log(user) as any}
               <button
                 className="bg-(--brand) px-4 py-1 rounded-md text-background border
                       border-(--brand) hover:bg-transparent active:bg-transparent
@@ -86,11 +85,12 @@ export default function Profile() {
                       console.log(err);
                       alert("Error deleting user");
                     });
-                }}
-              >
+                  }}
+                  >
                 Delete
               </button>
             </div>
+            <h1 className="text-[1.2rem] text-gray-600">Grade {user.grade as number}</h1>
             <div className="flex text-gray-600 gap-4 font-medium">
               <motion.h1
                 onClick={() => router.push(`/user/followers/${user.id}`)}

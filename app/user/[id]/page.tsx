@@ -87,6 +87,7 @@ export default function User({ params }: { params: Promise<{ id: string }> }) {
                   <h1 className="text-(--secondary-text)">admin</h1>
                 )}
               </div>
+            <h1 className="text-[1.2rem] text-gray-600">Grade {user?.grade as number}</h1>
               <div className="flex gap-2 text-(--secondary-text)">
                 <motion.h1
                   whileHover={{ scale: 1.05 }}
