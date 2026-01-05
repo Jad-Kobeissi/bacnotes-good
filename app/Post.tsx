@@ -19,6 +19,7 @@ export default function Post({
   const [following, setFollowing] = useState<boolean | null>(null);
   const [liked, setLiked] = useState<boolean | null>(null);
   const [likes, setLikes] = useState<number>(post.likes as number);
+  const [deleteDisabled, setDeleteDisabled] = useState(false);
   useEffect(() => {
     if (!user || !post) return;
 
@@ -265,9 +266,10 @@ export default function Post({
       </div>
       {post.authorId == user?.id || user?.admin ? (
         <button
-          className="bg-(--brand) px-4 py-1 rounded-md text-background border border-(--brand) hover:bg-transparent active:bg-transparent hover:text-(--brand) active:text-(--brand) transition-all duration-200"
+          className="bg-(--brand) px-4 py-1 rounded-md text-background border border-(--brand) hover:bg-transparent active:bg-transparent hover:text-(--brand) active:text-(--brand) transition-all duration-200 disabled:bg-red-300 disabled:border-red-300 disabled:text-white"
           onClick={(e) => {
             e.stopPropagation();
+            setDeleteDisabled(true);
             axios
               .delete(`/api/posts/${post.id}`, {
                 headers: {
@@ -286,8 +288,10 @@ export default function Post({
               .catch((err) => {
                 console.log(err);
                 alert("Error deleting post");
-              });
+              })
+              .finally(() => setDeleteDisabled(false));
           }}
+          disabled={deleteDisabled}
         >
           Delete
         </button>

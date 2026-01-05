@@ -19,6 +19,7 @@ export default function PostPage({
   const { id } = React.use(params);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
+  const [deleteDisabled, setDeleteDisabled] = useState(false);
   const [post, setPost] = useState<TPost | null>(null);
   const [following, setFollowing] = useState<boolean | null>(null);
   const [liked, setLiked] = useState<boolean | null>(null);
@@ -221,9 +222,10 @@ export default function PostPage({
             </h1>
             {post.authorId == user?.id ? (
               <button
-                className="bg-(--brand) px-4 py-1 rounded-md text-background border border-(--brand) hover:bg-transparent active:bg-transparent hover:text-(--brand) active:text-(--brand) transition-all duration-200"
+                className="bg-(--brand) px-4 py-1 rounded-md text-background border border-(--brand) hover:bg-transparent active:bg-transparent hover:text-(--brand) active:text-(--brand) transition-all duration-200 disabled:bg-red-300 disabled:border-red-300 disabled:text-white"
                 onClick={(e) => {
                   e.stopPropagation();
+                  setDeleteDisabled(true);
                   axios
                     .delete(`/api/posts/${post.id}`, {
                       headers: {
@@ -237,8 +239,10 @@ export default function PostPage({
                     .catch((err) => {
                       console.log(err);
                       alert("Error deleting post");
-                    });
+                    })
+                    .finally(() => setDeleteDisabled(false));
                 }}
+                disabled={deleteDisabled}
               >
                 Delete
               </button>
