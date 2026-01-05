@@ -101,8 +101,8 @@ export async function PUT(
 
     if (decoded.id !== user.id)
       return new Response("Unauthorized", { status: 401 });
-    const { username, email } = await req.json();
-
+    const { username, email, grade } = await req.json();
+    const intGrade = parseInt(grade)
     const newUser = await prisma.user.update({
       where: {
         id,
@@ -114,6 +114,7 @@ export async function PUT(
             : user.username,
         email:
           email && email !== "" && email !== user.email ? email : user.email,
+        grade: intGrade && intGrade !== user.grade ? intGrade : user.grade
       },
       include: {
         followers: true,
