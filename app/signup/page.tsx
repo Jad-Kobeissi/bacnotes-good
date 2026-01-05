@@ -136,7 +136,6 @@ export default function SignUp() {
                 placeholder="Re-enter your password"
                 id="grade"
                 className="shadow-md px-4 py-1 text-[1.2rem] rounded-md outline-none"
-                value={grade}
                 max={12}
                 min={1}
                 onChange={(e) => setGrade(parseInt(e.target.value))}
