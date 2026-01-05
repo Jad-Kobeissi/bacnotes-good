@@ -16,7 +16,7 @@ export default function EditPage({
   const { user, setUser } = useUser();
   const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
-  const [grade, setGrade] = useState(9)
+  const [grade, setGrade] = useState<number>(9)
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const router = useRouter();
@@ -25,7 +25,7 @@ export default function EditPage({
 
     setUsername(user.username as string);
     setEmail(user.email as string);
-    setGrade(user.grade)
+    setGrade(user.grade as number)
   }, [user]);
   useEffect(() => {
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -53,7 +53,7 @@ export default function EditPage({
                 {
                   username,
                   email,
-                    grade
+                  grade
                 },
                 {
                   headers: {
@@ -115,7 +115,7 @@ export default function EditPage({
               id="grade"
               className="shadow-md px-4 py-1 text-[1.2rem] rounded-md outline-none"
               value={grade}
-              onChange={(e) => setGrade(e.target.value)}
+              onChange={(e) => setGrade(parseInt(e.target.value))}
             />
           </div>
             <button className="bg-(--blue) text-background flex px-3 py-1 text-[1.2rem] gap-2 rounded-md font-semibold border border-(--blue) group hover:text-(--blue) hover:bg-transparent transition-all duration-200">
