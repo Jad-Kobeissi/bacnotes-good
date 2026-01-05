@@ -64,6 +64,7 @@ export function UserHit({ hit }: { hit: any }) {
     id: hit.objectID,
     username: hit.username,
     email: hit.email,
+    grade: hit.grade,
     admin: hit.admin || false,
     createdAt: hit.createdAt,
     followers: hit.followers || [],
