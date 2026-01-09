@@ -133,7 +133,7 @@ export default function SignUp() {
               </label>
               <input
                 type="number"
-                placeholder="Re-enter your password"
+                placeholder="Enter your grade"
                 id="grade"
                 className="shadow-md px-4 py-1 text-[1.2rem] rounded-md outline-none"
                 max={12}
