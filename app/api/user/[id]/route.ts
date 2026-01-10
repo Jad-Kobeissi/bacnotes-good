@@ -68,14 +68,20 @@ export async function DELETE(
     );
 
     if (!user) return new Response("User not found", { status: 404 });
-    if (decoded.id !== id) return new Response("Unauthorized", { status: 401 });
+    if (decoded.id !== id && !decoded.admin)
+      return new Response("Unauthorized", { status: 401 });
 
     await prisma.user.delete({
       where: {
         id,
       },
     });
-
+    await algoliaAdmin.deleteBy({
+      indexName: process.env.NEXT_PUBLIC_USERS_INDEX_NAME!,
+      deleteByParams: {
+        filters: `id:"${id}"`,
+      },
+    });
     return Response.json(user);
   } catch (error: any) {
     return new Response(error, { status: 500 });
@@ -102,7 +108,7 @@ export async function PUT(
     if (decoded.id !== user.id)
       return new Response("Unauthorized", { status: 401 });
     const { username, email, grade } = await req.json();
-    const intGrade = parseInt(grade)
+    const intGrade = parseInt(grade);
     const newUser = await prisma.user.update({
       where: {
         id,
@@ -114,7 +120,7 @@ export async function PUT(
             : user.username,
         email:
           email && email !== "" && email !== user.email ? email : user.email,
-        grade: intGrade && intGrade !== user.grade ? intGrade : user.grade
+        grade: intGrade && intGrade !== user.grade ? intGrade : user.grade,
       },
       include: {
         followers: true,

@@ -41,8 +41,10 @@ model User {
   likedPosts  Post[]   @relation("likedUsers")
   likedReplies Reply[] @relation("likesReply")
   PostReports PostReport[]
+  userReports UserReport[] @relation("reportsMade")
   RequestReports RequestReport[]
   ReplyReports ReplyReport[]
+  reports UserReport[] @relation("userReports")
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
 }
@@ -110,6 +112,14 @@ model ReplyReport {
   reply Reply @relation(fields: [replyId], references: [id], onDelete: Cascade)
   replyId String
   reporter User @relation(fields: [reporterId], references: [id])
+  reporterId String
+  createdAt DateTime @default(now())
+}
+model UserReport {
+  id String @id @default(uuid())
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade, "userReports") 
+  userId String
+  reporter User @relation(fields: [reporterId], references: [id], "reportsMade")
   reporterId String
   createdAt DateTime @default(now())
 }

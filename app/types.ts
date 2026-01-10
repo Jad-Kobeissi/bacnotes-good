@@ -64,7 +64,7 @@ export interface TJWT {
   username: string;
   email: string;
   admin: Boolean;
-  grade: Number
+  grade: Number;
 }
 
 export interface TPostReport {
@@ -87,6 +87,14 @@ export interface TReplyReport {
   id: String;
   reply: TReply;
   replyId: String;
+  reporter: TUser;
+  reporterId: String;
+  createdAt: Date;
+}
+export interface TUserReport {
+  id: String;
+  user: TUser;
+  userId: String;
   reporter: TUser;
   reporterId: String;
   createdAt: Date;

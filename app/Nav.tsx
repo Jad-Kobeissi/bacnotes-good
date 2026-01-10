@@ -27,7 +27,7 @@ export default function Nav() {
           <Link href={"/profile"}>Profile</Link>
           <span className="w-0 h-0.5 absolute bottom-0 left-0 bg-foreground group-hover:w-full group-active:w-full transition-all duration-200 rounded-md"></span>
         </div>
-        <div
+        <button
           className="relative group cursor-pointer"
           onClick={() => {
             localStorage.clear();
@@ -36,9 +36,9 @@ export default function Nav() {
             router.push("/");
           }}
         >
-          <h1>LogOut</h1>
+          LogOut
           <span className="w-0 h-0.5 absolute bottom-0 left-0 bg-foreground group-hover:w-full group-active:w-full transition-all duration-200 rounded-md"></span>
-        </div>
+        </button>
       </div>
     </nav>
   );

@@ -16,6 +16,7 @@ export default function User({ params }: { params: Promise<{ id: string }> }) {
   const { id } = React.use(params);
   const { user } = useUser();
   const router = useRouter();
+  const [loading, setLoading] = useState(false);
   const [fUser, setFUser] = useState<TUser | null>(null);
   const [posts, setPosts] = useState<TPost[]>([]);
   const [hasMore, setHasMore] = useState(true);
@@ -75,67 +76,105 @@ export default function User({ params }: { params: Promise<{ id: string }> }) {
   return (
     <>
       <Nav />
-      <div className="pt-25">
-        {!error ? (
-          <>
-            <div className="pt-25 flex flex-col items-center justify-center gap-2">
-              <div className="flex gap-2">
-                <h1 className="text-[1.5rem] font-semibold">
-                  {fUser?.username}
+      {loading ? (
+        <Loading className="h-screen flex items-center justify-center" />
+      ) : (
+        <div className="pt-25">
+          {!error ? (
+            <>
+              <div className="pt-25 flex flex-col items-center justify-center gap-2">
+                <div className="flex gap-2">
+                  <h1 className="text-[1.5rem] font-semibold">
+                    {fUser?.username}
+                  </h1>
+                  {fUser?.admin && (
+                    <h1 className="text-(--secondary-text)">admin</h1>
+                  )}
+                  {fUser?.id !== user?.id && (
+                    <button
+                      className="text-background bg-(--brand) px-6 rounded-md font-medium border border-(--brand) hover:bg-transparent active:bg-transparent hover:text-(--brand) active:text-(--brand) transition-all duration-200"
+                      onClick={(e) => {
+                        e.preventDefault();
+                        setLoading(true);
+                        axios
+                          .post(
+                            `/api/user/report/${fUser?.id}`,
+                            {},
+                            {
+                              headers: {
+                                Authorization: `Bearer ${getCookie("token")}`,
+                              },
+                            }
+                          )
+                          .then((res) => {
+                            alert("User reported successfully");
+                          })
+                          .catch((err) => {
+                            alert("Error reporting user: " + err.response.data);
+                          })
+                          .finally(() => setLoading(false));
+                      }}
+                    >
+                      Report
+                    </button>
+                  )}
+                </div>
+                <h1 className="text-[1.2rem] text-gray-600">
+                  Grade {user?.grade as number}
                 </h1>
-                {fUser?.admin && (
-                  <h1 className="text-(--secondary-text)">admin</h1>
-                )}
+                <div className="flex gap-2 text-(--secondary-text)">
+                  <motion.h1
+                    whileHover={{ scale: 1.05 }}
+                    whileTap={{ scale: 0.9 }}
+                    onClick={() => {
+                      router.push(`/user/followers/${fUser?.id}`);
+                    }}
+                  >
+                    Followers: {fUser?.followers.length}
+                  </motion.h1>
+                  <motion.h1
+                    whileHover={{ scale: 1.05 }}
+                    whileTap={{ scale: 0.9 }}
+                    onClick={() => {
+                      router.push(`/user/following/${fUser?.id}`);
+                    }}
+                  >
+                    Following: {fUser?.following.length}
+                  </motion.h1>
+                </div>
               </div>
-            <h1 className="text-[1.2rem] text-gray-600">Grade {user?.grade as number}</h1>
-              <div className="flex gap-2 text-(--secondary-text)">
-                <motion.h1
-                  whileHover={{ scale: 1.05 }}
-                  whileTap={{ scale: 0.9 }}
-                  onClick={() => {
-                    router.push(`/user/followers/${fUser?.id}`);
-                  }}
-                >
-                  Followers: {fUser?.followers.length}
-                </motion.h1>
-                <motion.h1
-                  whileHover={{ scale: 1.05 }}
-                  whileTap={{ scale: 0.9 }}
-                  onClick={() => {
-                    router.push(`/user/following/${fUser?.id}`);
-                  }}
-                >
-                  Following: {fUser?.following.length}
-                </motion.h1>
-              </div>
-            </div>
 
-            <InfiniteScroll
-              hasMore={hasMore}
-              dataLength={posts.length}
-              next={fetchPost}
-              loader={
-                <Loading className="flex justify-center items-center w-screen" />
-              }
-              className="w-3/4 max-[500px]:w-screen px-4 flex flex-col gap-2 items-start mt-20"
-            >
-              {posts.map((post) => (
-                <Post setPosts={setPosts} post={post} key={post.id as string} />
-              ))}
-            </InfiniteScroll>
-            {errorP && (
-              <Error className="text-center my-2 text-[1.4rem] w-screen overflow-x-hidden">
-                {errorP}
-              </Error>
-            )}
-            {error && <Error className="text-center">{error}</Error>}
-          </>
-        ) : (
-          <Error className="text-[1.5rem] text-center flex items-center justify-center pt-40">
-            {error}
-          </Error>
-        )}
-      </div>
+              <InfiniteScroll
+                hasMore={hasMore}
+                dataLength={posts.length}
+                next={fetchPost}
+                loader={
+                  <Loading className="flex justify-center items-center w-screen" />
+                }
+                className="w-3/4 max-[500px]:w-screen px-4 flex flex-col gap-2 items-start mt-20"
+              >
+                {posts.map((post) => (
+                  <Post
+                    setPosts={setPosts}
+                    post={post}
+                    key={post.id as string}
+                  />
+                ))}
+              </InfiniteScroll>
+              {errorP && (
+                <Error className="text-center my-2 text-[1.4rem] w-screen overflow-x-hidden">
+                  {errorP}
+                </Error>
+              )}
+              {error && <Error className="text-center">{error}</Error>}
+            </>
+          ) : (
+            <Error className="text-[1.5rem] text-center flex items-center justify-center pt-40">
+              {error}
+            </Error>
+          )}
+        </div>
+      )}
     </>
   );
 }

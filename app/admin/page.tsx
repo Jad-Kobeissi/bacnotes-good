@@ -22,6 +22,12 @@ export default function AdminPage() {
           >
             Request Reports
           </button>
+          <button
+            className="bg-(--brand) px-4 py-1 rounded-md text-background text-[1.2rem]"
+            onClick={() => router.push("/admin/userReports")}
+          >
+            User Reports
+          </button>
         </div>
       </div>
     </>
