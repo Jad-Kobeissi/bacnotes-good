@@ -23,6 +23,8 @@ export async function GET(
         followers: true,
         following: true,
         viewedPosts: true,
+        blockedUsers: true,
+        blockedBy: true,
       },
     });
 

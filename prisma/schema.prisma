@@ -45,6 +45,8 @@ model User {
   RequestReports RequestReport[]
   ReplyReports ReplyReport[]
   reports UserReport[] @relation("userReports")
+  blockedBy User[] @relation("blockedUsers")
+  blockedUsers User[] @relation("blockedUsers")
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
 }

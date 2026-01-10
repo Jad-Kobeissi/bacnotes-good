@@ -18,7 +18,6 @@ export async function POST(req: Request) {
     )
       return new Response("Please Fill All Fields", { status: 400 });
 
-  
     const userCheck = await prisma.user.findFirst({
       where: { OR: [{ email }, { username }] },
     });
@@ -31,7 +30,7 @@ export async function POST(req: Request) {
         username,
         email,
         password: hashedPassword,
-        grade
+        grade,
       },
       include: {
         posts: true,
@@ -41,6 +40,14 @@ export async function POST(req: Request) {
         likedPosts: true,
         likedReplies: true,
         requests: true,
+        blockedBy: true,
+        blockedUsers: true,
+        replies: true,
+        reports: true,
+        PostReports: true,
+        ReplyReports: true,
+        RequestReports: true,
+        userReports: true,
       },
     });
 
@@ -52,7 +59,13 @@ export async function POST(req: Request) {
       },
     });
     const token = await sign(
-      { username, id: user.id, admin: user.admin, email: user.email, grade: user.grade },
+      {
+        username,
+        id: user.id,
+        admin: user.admin,
+        email: user.email,
+        grade: user.grade,
+      },
       process.env.JWT_SECRET as string
     );
 

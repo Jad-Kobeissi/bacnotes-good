@@ -1,4 +1,5 @@
 import { Subject } from "./generated/prisma/enums";
+import Reply from "./Reply";
 
 export interface TUser {
   id: String;
@@ -16,8 +17,12 @@ export interface TUser {
   likedPosts: TPost[];
   likedReplies: TReply[];
   PostReports: TPostReport[];
+  userReports: TUserReport[];
   RequestReports: TRequestReport[];
   ReplyReports: TReplyReport[];
+  reports: TUserReport[];
+  blockedBy: TUser[];
+  blockedUsers: TUser[];
   createdAt: Date;
   updatedAt: Date;
 }

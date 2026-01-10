@@ -18,8 +18,26 @@ export async function GET(req: Request) {
           not: decoded.id,
         },
         author: {
-          grade: decoded.grade as number
-        }
+          grade: decoded.grade as number,
+          NOT: {
+            OR: [
+              {
+                blockedBy: {
+                  some: {
+                    id: decoded.id as string,
+                  },
+                },
+              },
+              {
+                blockedUsers: {
+                  some: {
+                    id: decoded.id as string,
+                  },
+                },
+              },
+            ],
+          },
+        },
       },
       include: {
         author: true,

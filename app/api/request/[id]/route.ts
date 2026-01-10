@@ -14,10 +14,30 @@ export async function GET(
       return new Response("Unauthorized", { status: 401 });
 
     const { id } = await params;
-
+    const decoded = decode(authHeader) as TJWT;
     const request = await prisma.request.findUnique({
       where: {
         id,
+        author: {
+          NOT: {
+            OR: [
+              {
+                blockedBy: {
+                  some: {
+                    id: decoded.id as string,
+                  },
+                },
+              },
+              {
+                blockedUsers: {
+                  some: {
+                    id: decoded.id as string,
+                  },
+                },
+              },
+            ],
+          },
+        },
       },
       include: {
         author: true,

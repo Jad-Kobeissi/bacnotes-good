@@ -20,6 +20,14 @@ export async function POST(req: Request) {
         likedPosts: true,
         likedReplies: true,
         requests: true,
+        blockedBy: true,
+        blockedUsers: true,
+        replies: true,
+        reports: true,
+        PostReports: true,
+        ReplyReports: true,
+        RequestReports: true,
+        userReports: true,
       },
     });
 
@@ -30,7 +38,13 @@ export async function POST(req: Request) {
       return new Response("Incorrect Password", { status: 400 });
 
     const token = await sign(
-      { id: user.id, username: user.username, email, admin: user.admin, grade: user.grade },
+      {
+        id: user.id,
+        username: user.username,
+        email,
+        admin: user.admin,
+        grade: user.grade,
+      },
       process.env.JWT_SECRET as string
     );
 

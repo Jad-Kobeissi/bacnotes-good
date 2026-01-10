@@ -1,5 +1,6 @@
-import { verify } from "jsonwebtoken";
+import { decode, verify } from "jsonwebtoken";
 import { prisma } from "../../init";
+import { TJWT } from "@/app/types";
 
 export async function GET(
   req: Request,
@@ -11,6 +12,7 @@ export async function GET(
     if (!authHeader || !verify(authHeader, process.env.JWT_SECRET!))
       return new Response("Unauuthorized", { status: 401 });
 
+    const decoded = decode(authHeader) as TJWT;
     const { id } = await params;
 
     const request = await prisma.request.findUnique({ where: { id } });
@@ -23,6 +25,26 @@ export async function GET(
     const replies = await prisma.reply.findMany({
       where: {
         requestId: id,
+        author: {
+          NOT: {
+            OR: [
+              {
+                blockedBy: {
+                  some: {
+                    id: decoded.id as string,
+                  },
+                },
+              },
+              {
+                blockedUsers: {
+                  some: {
+                    id: decoded.id as string,
+                  },
+                },
+              },
+            ],
+          },
+        },
       },
       include: {
         author: true,
