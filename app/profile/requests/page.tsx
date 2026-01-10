@@ -57,7 +57,7 @@ export default function Profile() {
         <>
           <div className="flex flex-col items-center justify-center pt-[30vh]">
             <div className="flex gap-2 items-center justify-center">
-              <div className="flex gap-2">
+              <div className="flex gap-2 items-center">
                 <h1 className="text-[1.2rem] font-semibold">{user.username}</h1>
                 {user.admin && (
                   <h1 className="text-(--secondary-text)">admin</h1>
@@ -90,6 +90,10 @@ export default function Profile() {
                 Delete
               </button>
             </div>
+            <h1 className="text-[1.2rem] text-gray-600">
+              Grade {user.grade as number}
+            </h1>
+
             <div className="flex text-gray-600 gap-4 font-medium">
               <motion.h1
                 onClick={() => router.push(`/user/followers/${user.id}`)}
