@@ -49,7 +49,7 @@ export default function BlockDialog({
                       );
                       sessionStorage.setItem("posts", JSON.stringify(newPosts));
 
-                      router.back();
+                      window.location.reload();
                     })
                     .catch((err) => {
                       alert("Error blocking user: " + err.response.data);

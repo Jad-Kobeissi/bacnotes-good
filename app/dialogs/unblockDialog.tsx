@@ -40,7 +40,7 @@ export default function UnblockDialog({
                     )
                     .then(() => {
                       alert("User unblocked");
-                      router.back();
+                      window.location.reload();
                     })
                     .catch((err) => {
                       alert("Error unblocking user: " + err.response.data);
