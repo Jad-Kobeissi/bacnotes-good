@@ -80,6 +80,10 @@ export function UserHit({ hit }: { hit: any }) {
     RequestReports: hit.RequestReports || [],
     updatedAt: hit.updatedAt,
     viewedPosts: hit.viewedPosts || [],
+    blockedBy: hit.blockedBy || [],
+    blockedUsers: hit.blockedUsers || [],
+    reports: hit.reports || [],
+    userReports: hit.userReports || [],
   };
   const router = useRouter();
   return (
