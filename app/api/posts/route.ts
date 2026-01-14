@@ -5,6 +5,9 @@ import { isEmpty } from "../isEmpty";
 import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
 import { algoliaAdmin } from "@/lib/algolia";
 import { Subject } from "@/app/generated/prisma/enums";
+import sharp from "sharp";
+
+const MAX_FILE_SIZE = 5 * 1024 * 1024; // 5MB
 
 export async function GET(req: Request) {
   try {
@@ -132,11 +135,26 @@ export async function POST(req: Request) {
 
     const filesUrl = await Promise.all(
       files.map(async (file) => {
+        let processedFile = file;
+        if (file.size > MAX_FILE_SIZE) {
+          const buffer = Buffer.from(await file.arrayBuffer());
+          const compressedBuffer = await sharp(buffer)
+            .resize({ width: 1024 }) // downscale large images
+            .jpeg({ quality: 80 }) // compress JPEG quality to 80%
+            .toBuffer();
+          processedFile = new File(
+            [new Uint8Array(compressedBuffer)],
+            file.name,
+            {
+              type: file.type,
+            }
+          );
+        }
         const imageRef = ref(
           storage,
           `${process.env.postsBucket}/${post.id}--${crypto.randomUUID()}`
         );
-        await uploadBytes(imageRef, file);
+        await uploadBytes(imageRef, processedFile);
         return (await getDownloadURL(imageRef)) as string;
       })
     );
